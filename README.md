@@ -28,7 +28,7 @@ Pré-requisito: [Node.js](https://nodejs.org/) 20 ou superior.
 
 ```bash
 # clonar o repositório
-git clone https://github.com/[seu-usuario]/receita-de-voinha.git
+git clone https://github.com/diasDev09/receita-de-voinha.git
 cd receita-de-voinha
 
 # instalar as dependências
