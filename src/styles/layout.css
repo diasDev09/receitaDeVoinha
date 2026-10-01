@@ -1,0 +1,85 @@
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Header */
+.header {
+    background: #fff;
+    border-bottom: 2px solid var(--green-light);
+}
+
+.header__inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+}
+
+.header__logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.header__search {
+    margin-left: auto;
+}
+
+.search-bar {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    min-width: 200px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.navbar__link {
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+    background: var(--green-light);
+    color: var(--green-dark);
+}
+
+/* Footer */
+.footer {
+    background: var(--green);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+/* 404 */
+.not-found {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.not-found h1 {
+    font-size: 4rem;
+    color: var(--green);
+}
+
+.not-found p {
+    margin: 1rem 0 1.5rem;
+}
