@@ -5,7 +5,7 @@ const recipes = [
         category: "Carnes",
         description:
             "Uma receita tradicional, cozida devagar, com feijão preto e carnes defumadas. Perfeita para o almoço de domingo.",
-        image: "/images/feijoada.png",
+        image: "src/public/images/feijoada.png",
         rating: 4.9,
         time: "1h30",
         ingredients: [
@@ -31,7 +31,7 @@ const recipes = [
         category: "Carnes",
         description:
             "Cremoso e fácil de fazer, é aquele prato que agrada toda a família.",
-        image: "/images/strogonoff.png",
+        image: "src/public/images/strogonoff.png",
         rating: 4.7,
         time: "40min",
         ingredients: [
@@ -57,7 +57,7 @@ const recipes = [
         category: "Massas",
         description:
             "Camadas de massa, molho de carne e queijo gratinado, como a vovó faz.",
-        image: "/images/lasanha.png",
+        image: "src/public/images/lasanha.png",
         rating: 4.8,
         time: "1h20",
         ingredients: [
@@ -82,7 +82,7 @@ const recipes = [
         category: "Massas",
         description:
             "Simples, rápido e cheio de sabor. Ótimo para quando o tempo está curto.",
-        image: "/images/alho-e-oleo.png",
+        image: "src/public/images/alho-e-oleo.png",
         rating: 4.5,
         time: "20min",
         ingredients: [
@@ -107,7 +107,7 @@ const recipes = [
         category: "Sobremesas",
         description:
             "O clássico pudim cremoso, sem furinhos, com calda de caramelo dourada.",
-        image: "/images/pudim.png",
+        image: "src/public/images/pudim.png",
         rating: 4.9,
         time: "1h15",
         ingredients: [
@@ -131,7 +131,7 @@ const recipes = [
         category: "Sobremesas",
         description:
             "Fofinho, úmido e coberto com a clássica cobertura de chocolate.",
-        image: "/images/bolo-de-cenoura.png",
+        image: "src/public/images/bolo-de-cenoura.png",
         rating: 4.8,
         time: "55min",
         ingredients: [
@@ -157,7 +157,7 @@ const recipes = [
         category: "Sopas",
         description:
             "Sopa quentinha de batata com couve e linguiça, ideal para dias frios.",
-        image: "/images/caldo-verde.png",
+        image: "src/public/images/caldo-verde.png",
         rating: 4.6,
         time: "45min",
         ingredients: [
@@ -182,7 +182,7 @@ const recipes = [
         category: "Saladas",
         description:
             "Fresca e colorida, com folhas, manga e um toque de limão.",
-        image: "/images/salada-tropical.png",
+        image: "src/public/images/salada-tropical.png",
         rating: 4.3,
         time: "15min",
         ingredients: [
@@ -206,7 +206,7 @@ const recipes = [
         category: "Lanches",
         description:
             "Crocante por fora, macio por dentro. Impossível comer só um.",
-        image: "/images/pao-de-queijo.png",
+        image: "src/public/images/pao-de-queijo.png",
         rating: 4.9,
         time: "50min",
         ingredients: [
