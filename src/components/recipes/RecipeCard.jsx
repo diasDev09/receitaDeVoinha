@@ -16,7 +16,7 @@ function RecipeCard({ recipe }) {
                     <span className="recipe-card__category">{recipe.category}</span>
                     <h3 className="recipe-card__title">{recipe.title}</h3>
                     <div className="recipe-card__meta">
-                        <span>⭐ {recipe.rating.toFixed(1)}</span>
+                        <span>⭐ {recipe.rating > 0 ? recipe.rating.toFixed(1) : "Nova"}</span>
                         <span>⏱️ {recipe.time}</span>
                     </div>
                 </div>

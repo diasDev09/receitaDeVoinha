@@ -58,7 +58,7 @@ function RecipeDetails() {
                     <h1>{recipe.title}</h1>
 
                     <div className="recipe-card__meta">
-                        <span>⭐ {recipe.rating.toFixed(1)}</span>
+                        <span>⭐ {recipe.rating > 0 ? recipe.rating.toFixed(1) : "Nova"}</span>
                         <span>⏱️ {recipe.time}</span>
                     </div>
 
