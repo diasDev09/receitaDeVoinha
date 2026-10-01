@@ -83,3 +83,52 @@
 .not-found p {
     margin: 1rem 0 1.5rem;
 }
+
+/* Header fixo no topo */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+}
+
+.header__logo {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+}
+
+.search-bar {
+    font: inherit;
+}
+
+.search-bar:focus {
+    outline: 2px solid var(--green);
+    border-color: var(--green);
+}
+
+/* Footer com topo arredondado */
+.footer {
+    margin-top: 2rem;
+    border-radius: 40px 40px 0 0;
+}
+
+.footer small {
+    opacity: 0.8;
+}
+
+/* Página entra suavemente */
+.main>* {
+    animation: fade-up 0.5s ease both;
+}
+
+@media (max-width: 720px) {
+    .header__search {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .header__search .search-bar {
+        width: 100%;
+    }
+}

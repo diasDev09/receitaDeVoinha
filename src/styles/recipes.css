@@ -76,13 +76,13 @@
     background: #fff;
     border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .recipe-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-hover);
 }
 
 .recipe-card__link {
@@ -95,6 +95,11 @@
     object-fit: cover;
     display: block;
     background: var(--green-light);
+    transition: transform 0.4s;
+}
+
+.recipe-card:hover .recipe-card__image {
+    transform: scale(1.05);
 }
 
 .recipe-card__body {

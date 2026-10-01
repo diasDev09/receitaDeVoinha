@@ -1,4 +1,5 @@
 import baseRecipes from "../data/recipes";
+import categories from "../data/categories";
 import { getCustomRecipes } from "./storage";
 
 export function getAllRecipes() {
@@ -51,4 +52,17 @@ export function sortRecipes(recipes, sortBy) {
         default:
             return list;
     }
+}
+
+// As N receitas mais bem avaliadas (receitas novas, com nota 0, ficam de fora)
+export function getFeaturedRecipes(recipes, limit = 4) {
+    return [...recipes].sort((a, b) => b.rating - a.rating).slice(0, limit);
+}
+
+// Categorias com a quantidade de receitas de cada uma
+export function getCategoriesWithCount(recipes) {
+    return categories.map((category) => ({
+        ...category,
+        count: recipes.filter((recipe) => recipe.category === category.name).length,
+    }));
 }
