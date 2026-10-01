@@ -70,7 +70,10 @@ function RecipeDetails() {
                         onClick={handleToggle}
                         aria-pressed={favorite}
                     >
-                        {favorite ? "❤️ Favoritada" : "🤍 Favoritar"}
+                        <span key={favorite ? "on" : "off"} className="heart" aria-hidden="true">
+                            {favorite ? "❤️" : "🤍"}
+                        </span>{" "}
+                        {favorite ? "Favoritada" : "Favoritar"}
                     </button>
 
                     {message && (

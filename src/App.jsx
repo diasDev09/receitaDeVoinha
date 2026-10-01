@@ -1,13 +1,15 @@
+import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import Home from "./pages/Home";
-import Recipes from "./pages/Recipes";
-import RecipeDetails from "./pages/RecipeDetails";
-import NewRecipe from "./pages/NewRecipe";
-import Favorites from "./pages/Favorites";
-import Categories from "./pages/Categories";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
+
+const Home = lazy(() => import("./pages/Home"));
+const Recipes = lazy(() => import("./pages/Recipes"));
+const RecipeDetails = lazy(() => import("./pages/RecipeDetails"));
+const NewRecipe = lazy(() => import("./pages/NewRecipe"));
+const Favorites = lazy(() => import("./pages/Favorites"));
+const Categories = lazy(() => import("./pages/Categories"));
+const About = lazy(() => import("./pages/About"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
