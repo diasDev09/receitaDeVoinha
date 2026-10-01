@@ -2,7 +2,7 @@
 
 Aplicação web de receitas culinárias caseiras, desenvolvida em **React + JavaScript + Vite**. Apresenta as receitas de forma visual, organizada e interativa, com busca, filtros, favoritos e cadastro de novas receitas.
 
-Projeto da **AV1** da disciplina [nome da disciplina] — [seu nome / nomes da dupla].
+Projeto da **AV1** da disciplina [FrontEnd-Framework] — [Caio Dias].
 
 ## ✨ Funcionalidades
 
