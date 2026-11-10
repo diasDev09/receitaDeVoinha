@@ -1,10 +1,4 @@
-import baseRecipes from "../data/recipes";
-import categories from "../data/categories";
-import { getCustomRecipes } from "./storage";
-
-export function getAllRecipes() {
-    return [...baseRecipes, ...getCustomRecipes()];
-}
+// Funções puras sobre listas de receitas. Quem busca os dados é a camada services/.
 
 // Remove acentos e caixa: "Pão" e "pao" passam a ser iguais
 export function normalizeText(text) {
@@ -60,7 +54,7 @@ export function getFeaturedRecipes(recipes, limit = 4) {
 }
 
 // Categorias com a quantidade de receitas de cada uma
-export function getCategoriesWithCount(recipes) {
+export function getCategoriesWithCount(recipes, categories) {
     return categories.map((category) => ({
         ...category,
         count: recipes.filter((recipe) => recipe.category === category.name).length,

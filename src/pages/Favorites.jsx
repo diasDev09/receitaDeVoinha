@@ -1,16 +1,20 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import EmptyState from "../components/common/EmptyState";
+import ErrorState from "../components/common/ErrorState";
+import Loading from "../components/common/Loading";
 import RecipeGrid from "../components/recipes/RecipeGrid";
 import useFavorites from "../hooks/useFavorites";
-import { getAllRecipes } from "../utils/recipes";
+import useAsync from "../hooks/useAsync";
+import { listRecipes } from "../services/recipeService";
 
 function Favorites() {
     const { favorites } = useFavorites();
+    const { data: recipes, loading, error, reload } = useAsync(listRecipes);
 
     const favoriteRecipes = useMemo(
-        () => getAllRecipes().filter((recipe) => favorites.includes(recipe.id)),
-        [favorites]
+        () => (recipes || []).filter((recipe) => favorites.includes(recipe.id)),
+        [recipes, favorites]
     );
 
     return (
@@ -19,7 +23,10 @@ function Favorites() {
                 <h1>Favoritos</h1>
             </div>
 
-            {favoriteRecipes.length > 0 ? (
+            {loading && <Loading message="Carregando favoritos..." />}
+            {error && <ErrorState message={error.message} onRetry={reload} />}
+
+            {recipes && favoriteRecipes.length > 0 && (
                 <>
                     <p className="results-count" aria-live="polite">
                         {favoriteRecipes.length === 1
@@ -28,7 +35,9 @@ function Favorites() {
                     </p>
                     <RecipeGrid recipes={favoriteRecipes} />
                 </>
-            ) : (
+            )}
+
+            {recipes && favoriteRecipes.length === 0 && (
                 <EmptyState
                     icon="🤍"
                     title="Você ainda não tem favoritos"

@@ -2,21 +2,24 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import SearchBar from "../components/common/SearchBar";
 import EmptyState from "../components/common/EmptyState";
+import ErrorState from "../components/common/ErrorState";
+import Loading from "../components/common/Loading";
 import RecipeFilter from "../components/recipes/RecipeFilter";
 import RecipeGrid from "../components/recipes/RecipeGrid";
-import { getAllRecipes, filterRecipes, sortRecipes } from "../utils/recipes";
+import useAsync from "../hooks/useAsync";
+import { listRecipes } from "../services/recipeService";
+import { filterRecipes, sortRecipes } from "../utils/recipes";
 
 function Recipes() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState("");
+    const { data: allRecipes, loading, error, reload } = useAsync(listRecipes);
 
     const search = searchParams.get("busca") || "";
     const category = searchParams.get("categoria") || "";
 
-    const allRecipes = useMemo(() => getAllRecipes(), []);
-
     const visibleRecipes = useMemo(() => {
-        const filtered = filterRecipes(allRecipes, { search, category });
+        const filtered = filterRecipes(allRecipes || [], { search, category });
         return sortRecipes(filtered, sortBy);
     }, [allRecipes, search, category, sortBy]);
 
@@ -71,26 +74,33 @@ function Recipes() {
                 onChange={(value) => updateParam("categoria", value)}
             />
 
-            <p className="results-count" aria-live="polite">
-                {visibleRecipes.length === 1
-                    ? "1 receita encontrada"
-                    : `${visibleRecipes.length} receitas encontradas`}
-            </p>
+            {loading && <Loading message="Carregando receitas..." />}
+            {error && <ErrorState message={error.message} onRetry={reload} />}
 
-            {visibleRecipes.length > 0 ? (
-                <RecipeGrid recipes={visibleRecipes} />
-            ) : (
-                <EmptyState
-                    icon="🔍"
-                    title="Nenhuma receita encontrada"
-                    message="Tente buscar por outro termo ou escolher outra categoria."
-                >
-                    {hasFilters && (
-                        <button type="button" className="btn" onClick={clearFilters}>
-                            Limpar filtros
-                        </button>
+            {allRecipes && (
+                <>
+                    <p className="results-count" aria-live="polite">
+                        {visibleRecipes.length === 1
+                            ? "1 receita encontrada"
+                            : `${visibleRecipes.length} receitas encontradas`}
+                    </p>
+
+                    {visibleRecipes.length > 0 ? (
+                        <RecipeGrid recipes={visibleRecipes} />
+                    ) : (
+                        <EmptyState
+                            icon="🔍"
+                            title="Nenhuma receita encontrada"
+                            message="Tente buscar por outro termo ou escolher outra categoria."
+                        >
+                            {hasFilters && (
+                                <button type="button" className="btn" onClick={clearFilters}>
+                                    Limpar filtros
+                                </button>
+                            )}
+                        </EmptyState>
                     )}
-                </EmptyState>
+                </>
             )}
         </section>
     );
