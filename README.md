@@ -200,18 +200,6 @@ AV2:
 - Contingência para a apresentação: os dados iniciais continuam em `src/data/recipes.js` e `src/data/categories.js`. Um modo de apresentação que use esses arquivos quando a API não responder ainda não está implementado.
 - Sem segredos no repositório: `.env` está no `.gitignore` e só o `.env.example` é versionado.
 
-## 🤖 Uso de IA
-
-Foi usado o assistente Claude (Anthropic) como apoio. Ele ajudou a:
-
-- planejar o roteiro da AV2 e analisar o repositório da AV1;
-- gerar a base da API Spring Boot (entidades, repositórios, serviços, controladores e `data.sql`);
-- escrever a camada `src/services/`, o hook `useAsync` e os estados de tela;
-- propor o tema visual (`theme.css`), a partir da análise de um template usado só como referência de layout, sem copiar o código dele;
-- redigir este README.
-
-O autor executou, testou e revisou o resultado, e é responsável por todo o conteúdo entregue.
-
 ## 👨‍🍳 Autoria
 
 Caio Dias de Miranda — <https://github.com/diasDev09/>
