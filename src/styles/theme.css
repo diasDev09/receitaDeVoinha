@@ -1,0 +1,184 @@
+/*
+ * Tema visual da AV2 (importado por último em main.jsx para vencer regras antigas).
+ * Layout inspirado em um template de referência; todo o CSS é próprio.
+ * Paleta: creme, amarelo, verde-limão e tons escuros (tokens em global.css).
+ */
+
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.container {
+  max-width: 1140px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Botões: texto escuro sobre amarelo (contraste), formato pílula */
+.btn {
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background: var(--yellow-dark);
+  border-color: var(--yellow-dark);
+  color: var(--ink);
+}
+
+.btn--secondary {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--ink);
+}
+
+.btn--secondary:hover {
+  background: #86d13c;
+  border-color: #86d13c;
+}
+
+.btn--favorited {
+  color: #fff;
+}
+
+/* Cabeçalho creme e navegação centralizada */
+.header {
+  background: var(--cream);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.navbar {
+  text-transform: uppercase;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.navbar a {
+  background: transparent;
+  color: var(--ink);
+  border-radius: 0;
+  border-bottom: 3px solid transparent;
+}
+
+.navbar a:hover,
+.navbar a.active {
+  background: transparent;
+  color: var(--ink);
+  border-bottom-color: var(--yellow);
+}
+
+/* Categorias e chips */
+.category-card {
+  border-radius: var(--radius);
+}
+
+.chip--active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--ink);
+}
+
+.section-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+/* Hero: cartão escuro com título branco e destaque amarelo */
+.hero {
+  background: linear-gradient(135deg, var(--dark), var(--ink));
+  color: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.hero::before,
+.hero__blob {
+  display: none;
+}
+
+.hero h1 {
+  color: #fff;
+  font-style: normal;
+}
+
+.hero h1 span,
+.hero h1 em {
+  color: var(--yellow);
+  font-style: normal;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.hero__tag {
+  background: var(--lime);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.hero__image {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  animation: none;
+}
+
+.hero__badge {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* Faixa de chamada no fim da home */
+.cta-band {
+  margin: 3rem 0;
+  padding: 2.5rem 1.5rem;
+  background: var(--lime);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.cta-band p {
+  margin: 0.5rem 0 1.25rem;
+}
+
+.cta-band .btn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.cta-band .btn:hover {
+  background: var(--dark);
+  border-color: var(--dark);
+  color: #fff;
+}
+
+/* Rodapé escuro e plano */
+.footer {
+  background: var(--dark);
+  color: #fff;
+  border-radius: 0;
+}
+
+@media (max-width: 720px) {
+  .hero {
+    border-radius: 24px;
+  }
+}

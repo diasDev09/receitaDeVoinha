@@ -1,7 +1,7 @@
 .back-link {
     display: inline-block;
     margin-bottom: 1rem;
-    color: var(--green-dark);
+    color: var(--ink);
     font-weight: 600;
 }
 
@@ -22,7 +22,7 @@
     max-height: 380px;
     object-fit: cover;
     border-radius: var(--radius);
-    background: var(--green-light);
+    background: var(--lime-soft);
 }
 
 .recipe-details__info {
@@ -33,7 +33,7 @@
 }
 
 .recipe-details__info h1 {
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .recipe-details__description {
@@ -56,8 +56,8 @@
 }
 
 .feedback--success {
-    background: var(--green-light);
-    color: var(--green-dark);
+    background: var(--lime-soft);
+    color: var(--ink);
 }
 
 .feedback--error {
@@ -76,7 +76,7 @@
 
 .recipe-details__content h2 {
     margin-bottom: 0.8rem;
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .ingredients-list,

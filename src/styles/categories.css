@@ -24,7 +24,7 @@
 
 .category-card:hover {
     transform: translateY(-5px);
-    background: var(--green-soft);
+    background: var(--surface);
     box-shadow: var(--shadow-hover);
 }
 
@@ -35,12 +35,12 @@
     height: 64px;
     margin-bottom: 0.4rem;
     border-radius: 50%;
-    background: var(--green-light);
+    background: var(--lime-soft);
     font-size: 2rem;
 }
 
 .category-card h3 {
-    color: var(--green-dark);
+    color: var(--ink);
     font-size: 1.1rem;
 }
 
