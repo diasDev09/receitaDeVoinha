@@ -1,22 +1,37 @@
-import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import Hero from "../components/home/Hero";
 import FeaturedRecipes from "../components/home/FeaturedRecipes";
 import CategoryPreview from "../components/home/CategoryPreview";
-import {
-    getAllRecipes,
-    getFeaturedRecipes,
-    getCategoriesWithCount,
-} from "../utils/recipes";
+import Loading from "../components/common/Loading";
+import ErrorState from "../components/common/ErrorState";
+import useAsync from "../hooks/useAsync";
+import { listRecipes } from "../services/recipeService";
+import { listCategories } from "../services/categoryService";
+import { getFeaturedRecipes, getCategoriesWithCount } from "../utils/recipes";
+
+// Definida fora do componente para ter identidade estável (useAsync não repete a chamada)
+async function loadHome(options) {
+    const [recipes, categories] = await Promise.all([
+        listRecipes(options),
+        listCategories(options),
+    ]);
+    return {
+        featured: getFeaturedRecipes(recipes, 4),
+        categories: getCategoriesWithCount(recipes, categories),
+    };
+}
 
 function Home() {
-    const recipes = useMemo(() => getAllRecipes(), []);
-    const featured = useMemo(() => getFeaturedRecipes(recipes, 4), [recipes]);
-    const categories = useMemo(() => getCategoriesWithCount(recipes), [recipes]);
+    const { data, loading, error, reload } = useAsync(loadHome);
+
+    if (loading) return <Loading message="Carregando receitas..." />;
+    if (error) return <ErrorState message={error.message} onRetry={reload} />;
+
+    const { featured, categories } = data;
 
     return (
         <>
-            <Hero recipe={featured[0]} />
+            {featured[0] && <Hero recipe={featured[0]} />}
             <FeaturedRecipes recipes={featured} />
             <CategoryPreview categories={categories} />
             <section className="container">

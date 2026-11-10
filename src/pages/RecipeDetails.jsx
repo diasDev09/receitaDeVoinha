@@ -1,9 +1,12 @@
-import { useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EmptyState from "../components/common/EmptyState";
+import ErrorState from "../components/common/ErrorState";
+import Loading from "../components/common/Loading";
 import RecipeIngredients from "../components/recipes/RecipeIngredients";
 import useFavorites from "../hooks/useFavorites";
-import { getAllRecipes } from "../utils/recipes";
+import useAsync from "../hooks/useAsync";
+import { getRecipe } from "../services/recipeService";
 import { PLACEHOLDER, handleImageError } from "../utils/images";
 
 function RecipeDetails() {
@@ -11,12 +14,12 @@ function RecipeDetails() {
     const { isFavorite, toggleFavorite } = useFavorites();
     const [message, setMessage] = useState("");
 
-    const recipe = useMemo(
-        () => getAllRecipes().find((item) => String(item.id) === id),
-        [id]
-    );
+    const load = useCallback((options) => getRecipe(id, options), [id]);
+    const { data: recipe, loading, error, reload } = useAsync(load);
 
-    if (!recipe) {
+    if (loading) return <Loading message="Carregando receita..." />;
+
+    if (error?.status === 404) {
         return (
             <EmptyState
                 icon="😕"
@@ -29,6 +32,8 @@ function RecipeDetails() {
             </EmptyState>
         );
     }
+
+    if (error) return <ErrorState message={error.message} onRetry={reload} />;
 
     const favorite = isFavorite(recipe.id);
 
