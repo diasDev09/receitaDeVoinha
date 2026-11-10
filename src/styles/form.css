@@ -27,7 +27,7 @@
 
 .field label {
     font-weight: 600;
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .field input,
@@ -47,8 +47,8 @@
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-    outline: 2px solid var(--green);
-    border-color: var(--green);
+    outline: 2px solid var(--yellow);
+    border-color: var(--yellow);
 }
 
 .field--error input,
@@ -76,12 +76,12 @@
 
 .btn--secondary {
     background: #fff;
-    color: var(--green-dark);
-    border: 1px solid var(--green);
+    color: var(--ink);
+    border: 1px solid var(--yellow);
 }
 
 .btn--secondary:hover {
-    background: var(--green-light);
+    background: var(--lime-soft);
 }
 
 .form-success {

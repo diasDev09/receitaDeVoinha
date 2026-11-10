@@ -8,7 +8,7 @@
     margin-bottom: 3rem;
     padding: 2.5rem;
     border-radius: 48px 48px 48px 120px;
-    background: var(--green-soft);
+    background: var(--surface);
     overflow: hidden;
 }
 
@@ -20,7 +20,7 @@
     width: 240px;
     height: 240px;
     border-radius: 50%;
-    background: var(--green-light);
+    background: var(--lime-soft);
 }
 
 .hero__text,
@@ -39,7 +39,7 @@
     padding: 0.3rem 1rem;
     border-radius: 999px;
     background: #fff;
-    color: var(--green-dark);
+    color: var(--ink);
     font-size: 0.9rem;
     font-weight: 700;
 }
@@ -47,11 +47,11 @@
 .hero h1 {
     margin-bottom: 1rem;
     font-size: clamp(2rem, 4.5vw, 3.2rem);
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .hero h1 span {
-    color: var(--green);
+    color: var(--yellow);
     font-style: italic;
 }
 
@@ -76,7 +76,7 @@
 .hero__blob {
     position: absolute;
     inset: 6% 4% 0 4%;
-    background: var(--green);
+    background: var(--yellow);
     border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
     opacity: 0.18;
 }
@@ -100,7 +100,7 @@
     object-fit: cover;
     border: 6px solid #fff;
     border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
-    background: var(--green-light);
+    background: var(--lime-soft);
     box-shadow: var(--shadow-hover);
     animation: float 5s ease-in-out infinite;
 }
@@ -124,7 +124,7 @@
 }
 
 .hero__badge strong {
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .hero__badge span {
@@ -145,11 +145,11 @@
 }
 
 .section-header h2 {
-    color: var(--green-dark);
+    color: var(--ink);
 }
 
 .section-link {
-    color: var(--green);
+    color: var(--yellow);
     font-weight: 700;
 }
 
