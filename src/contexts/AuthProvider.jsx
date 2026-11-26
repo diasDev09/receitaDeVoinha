@@ -53,8 +53,8 @@ function AuthProvider({ children }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const login = useCallback(async (username, password) => {
-        const { token, user } = await authService.login(username, password);
+    // Login e cadastro terminam igual: a API devolve { token, user } e a sessão começa
+    const startSession = useCallback(({ token, user }) => {
         const next = { token, user };
         setAuthToken(token);
         saveSession(next); // só token e dados públicos do usuário, nunca a senha
@@ -62,6 +62,17 @@ function AuthProvider({ children }) {
         setAuthNotice(null);
         return user;
     }, []);
+
+    const login = useCallback(
+        async (username, password) => startSession(await authService.login(username, password)),
+        [startSession]
+    );
+
+    const register = useCallback(
+        async (name, username, password) =>
+            startSession(await authService.register(name, username, password)),
+        [startSession]
+    );
 
     // Se o usuário estiver numa rota protegida, o ProtectedRoute o leva ao /login
     const logout = useCallback(() => {
@@ -77,9 +88,10 @@ function AuthProvider({ children }) {
             isAuthenticated: Boolean(session),
             authNotice,
             login,
+            register,
             logout,
         }),
-        [session, authNotice, login, logout],
+        [session, authNotice, login, register, logout],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
