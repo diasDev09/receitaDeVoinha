@@ -1,43 +1,40 @@
-import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import EmptyState from "../components/common/EmptyState";
 import ErrorState from "../components/common/ErrorState";
 import Loading from "../components/common/Loading";
 import RecipeGrid from "../components/recipes/RecipeGrid";
+import useAuth from "../hooks/useAuth";
 import useFavorites from "../hooks/useFavorites";
-import useAsync from "../hooks/useAsync";
-import { listRecipes } from "../services/recipeService";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
+// Rota protegida: os favoritos são do usuário logado e vêm da API (GET /api/favoritos)
 function Favorites() {
-    const { favorites } = useFavorites();
-    const { data: recipes, loading, error, reload } = useAsync(listRecipes);
-
-    const favoriteRecipes = useMemo(
-        () => (recipes || []).filter((recipe) => favorites.includes(recipe.id)),
-        [recipes, favorites]
-    );
+    useDocumentTitle("Favoritos");
+    const { user } = useAuth();
+    const { favorites, loading, error, reload } = useFavorites();
 
     return (
         <section>
             <div className="page-title">
                 <h1>Favoritos</h1>
             </div>
+            <p className="page-subtitle">Receitas salvas por {user.name}.</p>
 
             {loading && <Loading message="Carregando favoritos..." />}
-            {error && <ErrorState message={error.message} onRetry={reload} />}
+            {error && <ErrorState error={error} onRetry={reload} />}
 
-            {recipes && favoriteRecipes.length > 0 && (
+            {favorites && favorites.length > 0 && (
                 <>
                     <p className="results-count" aria-live="polite">
-                        {favoriteRecipes.length === 1
+                        {favorites.length === 1
                             ? "1 receita salva"
-                            : `${favoriteRecipes.length} receitas salvas`}
+                            : `${favorites.length} receitas salvas`}
                     </p>
-                    <RecipeGrid recipes={favoriteRecipes} />
+                    <RecipeGrid recipes={favorites} />
                 </>
             )}
 
-            {recipes && favoriteRecipes.length === 0 && (
+            {favorites && favorites.length === 0 && (
                 <EmptyState
                     icon="🤍"
                     title="Você ainda não tem favoritos"

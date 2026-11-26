@@ -8,12 +8,23 @@ import RecipeFilter from "../components/recipes/RecipeFilter";
 import RecipeGrid from "../components/recipes/RecipeGrid";
 import useAsync from "../hooks/useAsync";
 import { listRecipes } from "../services/recipeService";
+import { listCategories } from "../services/categoryService";
 import { filterRecipes, sortRecipes } from "../utils/recipes";
+
+// Fora do componente para ter identidade estável (useAsync não repete a chamada)
+async function loadRecipesPage(options) {
+    const [recipes, categories] = await Promise.all([
+        listRecipes(options),
+        listCategories(options),
+    ]);
+    return { recipes, categories };
+}
 
 function Recipes() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [sortBy, setSortBy] = useState("");
-    const { data: allRecipes, loading, error, reload } = useAsync(listRecipes);
+    const { data, loading, error, reload } = useAsync(loadRecipesPage);
+    const allRecipes = data?.recipes;
 
     const search = searchParams.get("busca") || "";
     const category = searchParams.get("categoria") || "";
@@ -69,13 +80,16 @@ function Recipes() {
                 </select>
             </div>
 
-            <RecipeFilter
-                selected={category}
-                onChange={(value) => updateParam("categoria", value)}
-            />
+            {data && (
+                <RecipeFilter
+                    categories={data.categories}
+                    selected={category}
+                    onChange={(value) => updateParam("categoria", value)}
+                />
+            )}
 
             {loading && <Loading message="Carregando receitas..." />}
-            {error && <ErrorState message={error.message} onRetry={reload} />}
+            {error && <ErrorState error={error} onRetry={reload} />}
 
             {allRecipes && (
                 <>

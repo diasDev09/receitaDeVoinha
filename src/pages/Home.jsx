@@ -25,7 +25,7 @@ function Home() {
     const { data, loading, error, reload } = useAsync(loadHome);
 
     if (loading) return <Loading message="Carregando receitas..." />;
-    if (error) return <ErrorState message={error.message} onRetry={reload} />;
+    if (error) return <ErrorState error={error} onRetry={reload} />;
 
     const { featured, categories } = data;
 
