@@ -1,9 +1,12 @@
 import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, CircleAlert, CircleCheck, FileQuestion, Heart, Trash2 } from "lucide-react";
 import EmptyState from "../components/common/EmptyState";
 import ErrorState from "../components/common/ErrorState";
 import Loading from "../components/common/Loading";
+import CategoryIcon from "../components/categories/CategoryIcon";
 import RecipeIngredients from "../components/recipes/RecipeIngredients";
+import RecipeMeta from "../components/recipes/RecipeMeta";
 import useAuth from "../hooks/useAuth";
 import useFavorites from "../hooks/useFavorites";
 import useAsync from "../hooks/useAsync";
@@ -11,6 +14,7 @@ import useDocumentTitle from "../hooks/useDocumentTitle";
 import { getRecipe, deleteRecipe } from "../services/recipeService";
 import { PLACEHOLDER, handleImageError } from "../utils/images";
 
+// Receita aberta como duas páginas de um livro
 function RecipeDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -29,9 +33,9 @@ function RecipeDetails() {
     if (error?.status === 404) {
         return (
             <EmptyState
-                icon="😕"
+                icon={FileQuestion}
                 title="Receita não encontrada"
-                message="Essa receita não existe ou foi removida."
+                message="Essa receita não existe ou foi excluída do caderno."
             >
                 <Link to="/receitas" className="btn">
                     Ver todas as receitas
@@ -56,7 +60,7 @@ function RecipeDetails() {
             const added = await toggleFavorite(recipe.id);
             setMessage({
                 type: "success",
-                text: added ? "Receita adicionada aos favoritos! ❤️" : "Receita removida dos favoritos.",
+                text: added ? "Receita adicionada aos favoritos." : "Receita removida dos favoritos.",
             });
         } catch (err) {
             setMessage({ type: "error", text: err.message });
@@ -78,45 +82,53 @@ function RecipeDetails() {
         }
     }
 
+    const MessageIcon = message?.type === "error" ? CircleAlert : CircleCheck;
+
     return (
         <article className="recipe-details">
             <Link to="/receitas" className="back-link">
-                ← Voltar para receitas
+                <ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />
+                Voltar para as receitas
             </Link>
 
-            <div className="recipe-details__top">
-                <img
-                    className="recipe-details__image"
-                    src={recipe.image || PLACEHOLDER}
-                    alt={recipe.title}
-                    onError={handleImageError}
-                />
+            <div className="spread">
+                <div className="spread__page">
+                    <img
+                        className="spread__image"
+                        src={recipe.image || PLACEHOLDER}
+                        alt={recipe.title}
+                        onError={handleImageError}
+                    />
 
-                <div className="recipe-details__info">
-                    <span className="recipe-card__category">{recipe.category}</span>
+                    <Link
+                        to={`/receitas?categoria=${encodeURIComponent(recipe.category)}`}
+                        className="spread__category"
+                    >
+                        <CategoryIcon name={recipe.category} size={15} />
+                        {recipe.category}
+                    </Link>
                     <h1>{recipe.title}</h1>
                     {recipe.author && (
-                        <p className="recipe-details__author">Enviada por {recipe.author}</p>
+                        <p className="spread__author">Receita de {recipe.author}</p>
                     )}
+                    <RecipeMeta recipe={recipe} />
 
-                    <div className="recipe-card__meta">
-                        <span>⭐ {recipe.rating > 0 ? recipe.rating.toFixed(1) : "Nova"}</span>
-                        <span>⏱️ {recipe.time}</span>
-                    </div>
+                    <p className="spread__description">{recipe.description}</p>
 
-                    <p className="recipe-details__description">{recipe.description}</p>
-
-                    <div className="recipe-details__actions">
+                    <div className="spread__actions">
                         <button
                             type="button"
-                            className={favorite ? "btn btn--favorited" : "btn"}
+                            className={favorite ? "btn btn--favorited" : "btn btn--secondary"}
                             onClick={handleToggle}
                             aria-pressed={favorite}
                             disabled={busy || (isAuthenticated && loadingFavorites)}
                         >
-                            <span key={favorite ? "on" : "off"} className="heart" aria-hidden="true">
-                                {favorite ? "❤️" : "🤍"}
-                            </span>{" "}
+                            <Heart
+                                size={17}
+                                strokeWidth={1.75}
+                                fill={favorite ? "currentColor" : "none"}
+                                aria-hidden="true"
+                            />
                             {favorite ? "Favoritada" : isAuthenticated ? "Favoritar" : "Entre para favoritar"}
                         </button>
 
@@ -127,7 +139,8 @@ function RecipeDetails() {
                                 onClick={handleDelete}
                                 disabled={busy}
                             >
-                                🗑️ Excluir receita
+                                <Trash2 size={17} strokeWidth={1.75} aria-hidden="true" />
+                                Excluir receita
                             </button>
                         )}
                     </div>
@@ -137,26 +150,27 @@ function RecipeDetails() {
                             className={`feedback feedback--${message.type}`}
                             role={message.type === "error" ? "alert" : "status"}
                         >
+                            <MessageIcon size={17} strokeWidth={1.75} aria-hidden="true" />
                             {message.text}
                         </p>
                     )}
                 </div>
-            </div>
 
-            <div className="recipe-details__content">
-                <section>
-                    <h2>Ingredientes</h2>
-                    <RecipeIngredients ingredients={recipe.ingredients} />
-                </section>
+                <div className="spread__page">
+                    <section className="spread__section">
+                        <h2>Ingredientes</h2>
+                        <RecipeIngredients ingredients={recipe.ingredients} />
+                    </section>
 
-                <section>
-                    <h2>Modo de preparo</h2>
-                    <ol className="preparation-list">
-                        {recipe.preparation.map((step, index) => (
-                            <li key={index}>{step}</li>
-                        ))}
-                    </ol>
-                </section>
+                    <section className="spread__section">
+                        <h2>Modo de preparo</h2>
+                        <ol className="preparation-list">
+                            {recipe.preparation.map((step, index) => (
+                                <li key={index}>{step}</li>
+                            ))}
+                        </ol>
+                    </section>
+                </div>
             </div>
         </article>
     );

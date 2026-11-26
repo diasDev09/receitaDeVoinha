@@ -1,3 +1,5 @@
+import CategoryIcon from "../categories/CategoryIcon";
+
 // categories vem da API (GET /api/categorias), recebida da página por props
 function RecipeFilter({ categories, selected, onChange }) {
     return (
@@ -5,6 +7,7 @@ function RecipeFilter({ categories, selected, onChange }) {
             <button
                 type="button"
                 className={selected === "" ? "chip chip--active" : "chip"}
+                aria-pressed={selected === ""}
                 onClick={() => onChange("")}
             >
                 Todas
@@ -15,9 +18,11 @@ function RecipeFilter({ categories, selected, onChange }) {
                     key={category.id}
                     type="button"
                     className={selected === category.name ? "chip chip--active" : "chip"}
+                    aria-pressed={selected === category.name}
                     onClick={() => onChange(category.name)}
                 >
-                    {category.icon} {category.name}
+                    <CategoryIcon name={category.name} size={15} />
+                    {category.name}
                 </button>
             ))}
         </div>

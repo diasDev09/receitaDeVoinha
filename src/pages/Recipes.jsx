@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { Plus, SearchX } from "lucide-react";
 import SearchBar from "../components/common/SearchBar";
 import EmptyState from "../components/common/EmptyState";
 import ErrorState from "../components/common/ErrorState";
@@ -56,7 +57,8 @@ function Recipes() {
             <div className="page-title">
                 <h1>Receitas</h1>
                 <Link to="/nova-receita" className="btn">
-                    + Nova receita
+                    <Plus size={17} strokeWidth={1.75} aria-hidden="true" />
+                    Nova receita
                 </Link>
             </div>
 
@@ -103,7 +105,7 @@ function Recipes() {
                         <RecipeGrid recipes={visibleRecipes} />
                     ) : (
                         <EmptyState
-                            icon="🔍"
+                            icon={SearchX}
                             title="Nenhuma receita encontrada"
                             message="Tente buscar por outro termo ou escolher outra categoria."
                         >

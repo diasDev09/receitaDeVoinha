@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import { BookMarked, Heart, PenLine, Search } from "lucide-react";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const features = [
-    { icon: "🔍", text: "Busque receitas por nome, descrição ou ingrediente" },
-    { icon: "🗂️", text: "Filtre por categoria e ordene como preferir" },
-    { icon: "❤️", text: "Salve suas receitas favoritas" },
-    { icon: "✍️", text: "Cadastre suas próprias receitas de família" },
+    { icon: Search, text: "Buscar receitas por nome, descrição ou ingrediente" },
+    { icon: BookMarked, text: "Filtrar por capítulo e ordenar como preferir" },
+    { icon: Heart, text: "Guardar as receitas favoritas na sua conta" },
+    { icon: PenLine, text: "Cadastrar as receitas da sua família" },
 ];
 
 function About() {
@@ -14,49 +15,41 @@ function About() {
     return (
         <section className="about">
             <div className="page-title">
-                <h1>Sobre o projeto</h1>
+                <h1>Sobre o caderno</h1>
             </div>
 
-            <div className="about__card">
-                <h2>Receita de Voinha 🍲</h2>
+            <div className="about__section">
                 <p>
-                    O Receita de Voinha é uma aplicação web de receitas culinárias
-                    caseiras, pensada para apresentar os pratos de forma visual,
-                    organizada e interativa. Aqui as receitas ficam à mão, do jeitinho
-                    que a vovó faz.
+                    Receitas de família costumam ficar em cadernos, mensagens e na memória de
+                    quem cozinha, e somem justo na hora do preparo. O Receita de Voinha junta
+                    essas receitas num caderno só, fácil de consultar e de continuar escrevendo.
                 </p>
             </div>
 
-            <div className="about__card">
-                <h2>Objetivo</h2>
-                <p>
-                    Este projeto foi desenvolvido como a primeira avaliação (AV1) da
-                    disciplina, com o objetivo de construir um protótipo funcional em
-                    React: navegação entre telas, gerenciamento de estado, formulário
-                    com validação, busca e filtro, e persistência dos dados no
-                    navegador com localStorage.
-                </p>
-            </div>
-
-            <div className="about__card">
-                <h2>O que você pode fazer</h2>
+            <div className="about__section">
+                <h2>O que dá para fazer</h2>
                 <ul className="about__features">
-                    {features.map((feature) => (
-                        <li key={feature.text}>
-                            <span aria-hidden="true">{feature.icon}</span>
-                            {feature.text}
+                    {features.map(({ icon: Icon, text }) => (
+                        <li key={text}>
+                            <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+                            {text}
                         </li>
                     ))}
                 </ul>
-                <p className="about__tech">
-                    Feito com React, JavaScript, Vite e React Router. Os dados ficam
-                    salvos apenas no seu navegador.
+            </div>
+
+            <div className="about__section">
+                <h2>Como foi feito</h2>
+                <p>
+                    Projeto da disciplina Front-end Frameworks (AV1 e AV2). O front é feito em
+                    React, Vite e React Router; as receitas, os favoritos e o login vêm de uma
+                    API em Java com Spring Boot.
                 </p>
             </div>
 
             <div className="about__cta">
                 <Link to="/receitas" className="btn">
-                    Explorar receitas
+                    Ver todas as receitas
                 </Link>
             </div>
         </section>

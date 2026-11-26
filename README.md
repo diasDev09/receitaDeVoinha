@@ -35,7 +35,8 @@ Receitas de família costumam ficar em cadernos, mensagens e na memória de quem
 ## 🛠️ Tecnologias
 
 - [React](https://react.dev/) 19, [Vite](https://vite.dev/) e [React Router](https://reactrouter.com/)
-- JavaScript, HTML e CSS tradicional (sem biblioteca de UI)
+- JavaScript, HTML e CSS tradicional (sem biblioteca de UI); ícones [Lucide](https://lucide.dev/) (`lucide-react`)
+- Fontes Old Standard TT (texto) e Instrument Sans (interface), do Google Fonts
 - `fetch` para consumir a API, centralizado em `src/services/`
 - Context API (`AuthProvider`) para a sessão
 - [oxlint](https://oxc.rs/docs/guide/usage/linter) para análise do código
@@ -119,7 +120,7 @@ src/
 ├── pages/             # Home, Recipes, RecipeDetails, NewRecipe, Favorites, Categories, About, Login, NotFound
 ├── services/          # api.js (fetch, token, erros), authService, recipeService,
 │                      # categoryService, favoriteService, contingency
-├── styles/            # estilos globais, por área, theme.css e auth.css
+├── styles/            # base (tokens, botões, formulários), layout, home, recipes, details, pages
 ├── utils/             # storage.js, validators.js, recipes.js, images.js
 ├── App.jsx
 └── main.jsx
@@ -207,7 +208,7 @@ As imagens ficam em `public/images` deste repositório; a API devolve apenas o c
 | Falha da API | — | Modo contingência com dados locais e aviso fixo | `services/contingency.js`, `ContingencyBanner.jsx` |
 | Configuração | Nenhuma | `VITE_API_URL` em `.env` (modelo em `.env.example`) | `src/services/api.js` |
 | Organização | Páginas, componentes e dados | + `services/`, `contexts/`, `hooks/` de sessão e contingência | pastas |
-| Visual | Tema verde | Tema novo (creme, amarelo e verde-limão) | `theme.css`, `auth.css` |
+| Visual | Tema verde | Caderno de receitas: capa azul-noite com estampa dourada, receita aberta como livro, sumário de capítulos, ícones no lugar de emojis | `src/styles/`, `CategoryIcon.jsx` |
 
 ## ✅ Requisitos
 

@@ -1,0 +1,151 @@
+/* Formulários (folha avulsa), login, sobre e 404 */
+
+.form-page {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+
+.form-success {
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--gold);
+  background: var(--sheet);
+  font-family: var(--font-book);
+  font-size: 1.0625rem;
+}
+
+.form-success h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.form-success h2 svg {
+  color: var(--indigo);
+}
+
+.form-success .form-actions {
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+/* Login */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 30rem;
+}
+
+.demo-accounts {
+  padding: 1.25rem 1.5rem;
+  border: 1.5px dashed var(--rule-strong);
+  border-radius: var(--radius);
+}
+
+.demo-accounts h2 {
+  margin-bottom: 0.75rem;
+  font-size: var(--text-md);
+}
+
+.demo-accounts ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  list-style: none;
+}
+
+.demo-accounts li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+}
+
+.demo-accounts code {
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+.demo-accounts small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* Sobre: texto corrido de livro */
+.about {
+  max-width: 44rem;
+}
+
+.about__section + .about__section {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.about__section h2 {
+  margin-bottom: 0.75rem;
+}
+
+.about__features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.about__features li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.about__features svg {
+  flex: none;
+  color: var(--indigo);
+}
+
+.about__cta {
+  margin-top: 2.5rem;
+}
+
+/* 404 */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.not-found__numeral {
+  color: var(--indigo);
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-style: italic;
+  line-height: 1;
+}
+
+.not-found p {
+  color: var(--muted);
+}
+
+.not-found .btn {
+  margin-top: 0.75rem;
+}

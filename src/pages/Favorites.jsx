@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 import EmptyState from "../components/common/EmptyState";
 import ErrorState from "../components/common/ErrorState";
 import Loading from "../components/common/Loading";
@@ -36,7 +37,7 @@ function Favorites() {
 
             {favorites && favorites.length === 0 && (
                 <EmptyState
-                    icon="🤍"
+                    icon={Heart}
                     title="Você ainda não tem favoritos"
                     message="Abra uma receita e clique em Favoritar para salvá-la aqui."
                 >

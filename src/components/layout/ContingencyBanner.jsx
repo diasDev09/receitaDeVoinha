@@ -1,3 +1,4 @@
+import { WifiOff } from "lucide-react";
 import useContingency from "../../hooks/useContingency";
 import { disableContingency } from "../../services/contingency";
 
@@ -15,11 +16,14 @@ function ContingencyBanner() {
         <div className="contingency-banner" role="status">
             <div className="container contingency-banner__inner">
                 <p>
-                    <strong>Modo contingência:</strong> a API está indisponível e você está
-                    vendo os dados de demonstração locais. Login, cadastro e favoritos
-                    precisam da API.
+                    <WifiOff size={18} strokeWidth={1.75} aria-hidden="true" />
+                    <span>
+                        <strong>Modo contingência:</strong> a API está indisponível e você está
+                        vendo os dados de demonstração locais. Login, cadastro e favoritos
+                        precisam da API.
+                    </span>
                 </p>
-                <button type="button" className="btn btn--secondary" onClick={backToApi}>
+                <button type="button" className="btn btn--small" onClick={backToApi}>
                     Voltar a usar a API
                 </button>
             </div>

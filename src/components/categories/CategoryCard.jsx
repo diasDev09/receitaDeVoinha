@@ -1,19 +1,25 @@
 import { Link } from "react-router-dom";
+import CategoryIcon from "./CategoryIcon";
 
-function CategoryCard({ category }) {
+// Uma linha do sumário: numeral, nome, pontilhado de guia e quantidade
+function CategoryCard({ category, numeral }) {
     return (
-        <Link
-            to={`/receitas?categoria=${encodeURIComponent(category.name)}`}
-            className="category-card"
-        >
-            <span className="category-card__icon" aria-hidden="true">
-                {category.icon}
-            </span>
-            <h3>{category.name}</h3>
-            <small>
-                {category.count === 1 ? "1 receita" : `${category.count} receitas`}
-            </small>
-        </Link>
+        <li>
+            <Link
+                to={`/receitas?categoria=${encodeURIComponent(category.name)}`}
+                className="toc__row"
+            >
+                <span className="toc__numeral" aria-hidden="true">
+                    {numeral}
+                </span>
+                <CategoryIcon name={category.name} size={20} className="toc__icon" />
+                <span className="toc__name">{category.name}</span>
+                <span className="toc__leader" aria-hidden="true" />
+                <span className="toc__count">
+                    {category.count === 1 ? "1 receita" : `${category.count} receitas`}
+                </span>
+            </Link>
+        </li>
     );
 }
 

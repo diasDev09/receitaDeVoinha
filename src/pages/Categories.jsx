@@ -1,3 +1,4 @@
+import { BookOpen } from "lucide-react";
 import CategoryGrid from "../components/categories/CategoryGrid";
 import Loading from "../components/common/Loading";
 import ErrorState from "../components/common/ErrorState";
@@ -30,7 +31,7 @@ function Categories() {
             {loading && <Loading message="Carregando categorias..." />}
             {error && <ErrorState error={error} onRetry={reload} />}
             {categories && categories.length === 0 && (
-                <EmptyState icon="🗂️" title="Nenhuma categoria cadastrada" />
+                <EmptyState icon={BookOpen} title="Nenhuma categoria cadastrada" />
             )}
             {categories && categories.length > 0 && (
                 <CategoryGrid categories={categories} />

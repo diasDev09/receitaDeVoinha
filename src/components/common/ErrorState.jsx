@@ -1,3 +1,4 @@
+import { CircleAlert, WifiOff } from "lucide-react";
 import EmptyState from "./EmptyState";
 import { enableContingency } from "../../services/contingency";
 
@@ -13,8 +14,8 @@ function ErrorState({ error, message, onRetry }) {
 
     return (
         <EmptyState
-            icon={offline ? "🔌" : "⚠️"}
-            title={offline ? "Servidor fora do ar" : "Algo deu errado"}
+            icon={offline ? WifiOff : CircleAlert}
+            title={offline ? "Servidor fora do ar" : "Não foi possível carregar"}
             message={message || error?.message || "Não foi possível carregar os dados."}
         >
             {onRetry && (
