@@ -1,8 +1,8 @@
 # 🍲 Receita de Voinha
 
-Aplicação web de receitas culinárias caseiras, desenvolvida em **React + JavaScript + Vite**. Apresenta as receitas de forma visual, organizada e interativa, com busca, filtros, favoritos e cadastro de novas receitas. Na AV2, as receitas e categorias passam a vir de uma **API REST em Java + Spring Boot**.
+Aplicação web de receitas culinárias caseiras, desenvolvida em **React + JavaScript + Vite**. Apresenta as receitas de forma visual, organizada e interativa, com busca, filtros, favoritos e cadastro de novas receitas. Na AV2, receitas, categorias, favoritos e cadastro passam a usar uma **API REST em Java + Spring Boot**, com **login, sessão, rotas protegidas e logout**.
 
-Projeto da disciplina Front-end Frameworks (AV1 e AV2) — Caio Dias de Miranda.
+Projeto da disciplina Front-end Frameworks (AV1 e AV2), Opção B (API do projeto de Back-end) — Caio Dias de Miranda.
 
 - Repositório do front-end (este): <https://github.com/diasDev09/receitaDeVoinha>
 - Repositório da API: <https://github.com/diasDev09/receitaDeVoinha-api>
@@ -15,26 +15,31 @@ Receitas de família costumam ficar em cadernos, mensagens e na memória de quem
 
 | Integrante | Contribuição |
 | --- | --- |
-| Caio Dias de Miranda | Projeto individual (exceção autorizada pelo professor): front-end, API, banco de dados, testes e documentação. Cumpre os mesmos requisitos mínimos de uma equipe de 3 pessoas. |
+| Caio Dias de Miranda | Projeto individual (exceção autorizada pelo professor): front-end, API, banco de dados, autenticação, testes e documentação. Cumpre os mesmos requisitos mínimos de uma equipe de 3 pessoas. |
 
 ## ✨ Funcionalidades
 
 - Página inicial com destaque, receitas mais bem avaliadas e categorias
 - Listagem de receitas com **busca por texto** (nome, descrição e ingredientes), **filtro por categoria** e **ordenação**
-- Página de **detalhes** com ingredientes e modo de preparo
-- **Favoritar** receitas, com página de favoritos
-- **Cadastro de nova receita** com formulário controlado e validação
+- Página de **detalhes** com ingredientes, modo de preparo e autor
+- **Login** com validação de campos e feedback de envio, credenciais inválidas e falha de rede
+- **Sessão preservada** após atualizar a página (token no `localStorage`, nunca a senha) e **logout**
+- **Rotas protegidas** (`/nova-receita` e `/favoritos`): sem sessão, redirecionam para `/login` e depois voltam para onde o usuário queria ir
+- **Favoritar** receitas, com página de favoritos por usuário (gravados na API)
+- **Cadastro de nova receita** gravado na API, com validação no formulário e no servidor (erros por campo)
+- **Excluir receita** (só o autor; a API responde 403 para os demais)
 - Estados de **carregamento**, **erro com "Tentar novamente"**, **lista vazia** e **receita não encontrada (404)**
-- Layout responsivo
-- Páginas Categorias, Sobre e 404
+- **Modo contingência**: se a API estiver fora do ar, o usuário pode ver os dados de demonstração locais
+- Layout responsivo; páginas Categorias, Sobre e 404
 
 ## 🛠️ Tecnologias
 
 - [React](https://react.dev/) 19, [Vite](https://vite.dev/) e [React Router](https://reactrouter.com/)
 - JavaScript, HTML e CSS tradicional (sem biblioteca de UI)
 - `fetch` para consumir a API, centralizado em `src/services/`
+- Context API (`AuthProvider`) para a sessão
 - [oxlint](https://oxc.rs/docs/guide/usage/linter) para análise do código
-- Back-end (repositório à parte): Java 21, Spring Boot, Spring Data JPA e banco H2
+- Back-end (repositório à parte): Java 25, Spring Boot, Spring Data JPA, BCrypt e banco H2
 
 ## ▶️ Como executar
 
@@ -57,11 +62,18 @@ npm run dev
 
 Abra o endereço exibido no terminal (normalmente `http://localhost:5173`).
 
+**Contas de demonstração** (também aparecem na tela de login):
+
+| Usuário | Senha | Observação |
+| --- | --- | --- |
+| `voinha` | `voinha123` | Autora das 9 receitas iniciais (pode excluí-las) |
+| `neto` | `neto123` | Usuário comum (recebe 403 ao tentar excluir receita da Voinha) |
+
 Variável de ambiente (arquivo `.env`, que **não** é versionado; o modelo é o `.env.example`):
 
 | Variável | Padrão | Para que serve |
 | --- | --- | --- |
-| `VITE_API_URL` | `http://localhost:8080` | Endereço da API |
+| `VITE_API_URL` | `http://localhost:8080` | Endereço da API (usado só em `src/services/api.js`) |
 
 Outros comandos:
 
@@ -73,18 +85,19 @@ Outros comandos:
 
 ## 🗺️ Rotas
 
-| Rota | Página |
-| --- | --- |
-| `/` | Home |
-| `/receitas` | Lista de receitas com busca e filtros |
-| `/receitas/:id` | Detalhes da receita |
-| `/nova-receita` | Formulário de cadastro |
-| `/favoritos` | Receitas favoritadas |
-| `/categorias` | Categorias |
-| `/sobre` | Sobre o projeto |
-| `*` | Página não encontrada (404) |
+| Rota | Página | Acesso |
+| --- | --- | --- |
+| `/` | Home | Público |
+| `/receitas` | Lista de receitas com busca e filtros | Público |
+| `/receitas/:id` | Detalhes da receita (favoritar e excluir) | Público (ações exigem login) |
+| `/categorias` | Categorias | Público |
+| `/sobre` | Sobre o projeto | Público |
+| `/login` | Login | Público |
+| `/nova-receita` | Formulário de cadastro | **Protegida** |
+| `/favoritos` | Receitas favoritadas do usuário | **Protegida** |
+| `*` | Página não encontrada (404) | Público |
 
-Os filtros da lista ficam na URL, por exemplo `/receitas?categoria=Massas&busca=queijo`.
+Os filtros da lista ficam na URL, por exemplo `/receitas?categoria=Massas&busca=queijo`. A proteção vale também para o endereço digitado direto na barra do navegador (`ProtectedRoute` em `src/components/auth/`).
 
 ## 🗂️ Estrutura do projeto
 
@@ -93,45 +106,70 @@ public/
 └── images/            # fotos das receitas
 src/
 ├── components/
+│   ├── auth/          # ProtectedRoute
 │   ├── common/        # Button, Input, SearchBar, Loading, EmptyState, ErrorState, ErrorMessage
-│   ├── layout/        # Header, Navbar, Footer, ScrollToTop
+│   ├── layout/        # Header (Entrar/Sair), Navbar, Footer, ScrollToTop, ContingencyBanner
 │   ├── home/          # Hero, FeaturedRecipes, CategoryPreview
 │   ├── recipes/       # RecipeCard, RecipeGrid, RecipeFilter, RecipeForm, RecipeIngredients
 │   └── categories/    # CategoryCard, CategoryGrid
-├── data/              # recipes.js, categories.js (dados iniciais da AV1)
-├── hooks/             # useAsync, useFavorites, useDocumentTitle
+├── contexts/          # authContext + AuthProvider (dono da sessão)
+├── data/              # recipes.js, categories.js (dados da AV1, hoje usados na contingência)
+├── hooks/             # useAsync, useAuth, useFavorites, useContingency, useDocumentTitle
 ├── layouts/           # MainLayout
-├── pages/             # Home, Recipes, RecipeDetails, NewRecipe, Favorites, Categories, About, NotFound
-├── services/          # api.js (fetch + erros), recipeService.js, categoryService.js
-├── styles/            # estilos globais, por área e theme.css (tema visual da AV2)
+├── pages/             # Home, Recipes, RecipeDetails, NewRecipe, Favorites, Categories, About, Login, NotFound
+├── services/          # api.js (fetch, token, erros), authService, recipeService,
+│                      # categoryService, favoriteService, contingency
+├── styles/            # estilos globais, por área, theme.css e auth.css
 ├── utils/             # storage.js, validators.js, recipes.js, images.js
 ├── App.jsx
 └── main.jsx
 ```
 
+## 🔐 Como funciona a autenticação
+
+1. `/login` envia `POST /api/auth/login` (`services/authService.js`). Enquanto envia, o botão mostra "Entrando..."; 401 mostra "Usuário ou senha inválidos." e limpa a senha; falha de rede mostra a mensagem de servidor fora do ar.
+2. Sucesso: o `AuthProvider` (`src/contexts/AuthProvider.jsx`) guarda `{ token, user }` no `localStorage` (chave `rdv:session`) e entrega o token a `services/api.js`, que passa a mandar `Authorization: Bearer <token>`.
+3. Ao recarregar a página, a sessão é lida do `localStorage` e confirmada com `GET /api/auth/me`.
+4. Qualquer resposta **401** a uma requisição com token (sessão vencida ou API reiniciada) limpa a sessão; a rota protegida leva ao `/login` com o aviso "Sua sessão expirou".
+5. **403** (ex.: excluir receita de outra pessoa) mostra a mensagem da API na própria tela, sem derrubar a sessão.
+6. "Sair" chama `POST /api/auth/logout` (o token deixa de valer no servidor) e remove a sessão local. Numa rota protegida, o usuário vai para `/login` com o aviso "Você saiu da sua conta."
+
+A senha nunca é salva no navegador nem no repositório; a API guarda só o hash BCrypt.
+
 ## 📦 Dados e persistência
 
 | Dado | Onde fica |
 | --- | --- |
-| Receitas e categorias iniciais | API (banco H2 em memória, carregado de `data.sql` a cada início) |
-| Favoritos | `localStorage`, chave `rdv:favorites` (lista de `id`) |
-| Receitas cadastradas pelo usuário | `localStorage`, chave `rdv:custom-recipes` (objetos completos) |
+| Receitas e categorias | API (banco H2 em memória, carregado de `data.sql` a cada início) |
+| Receitas cadastradas | API (`POST /api/receitas`), com o usuário logado como autor |
+| Favoritos | API, por usuário (`/api/favoritos`) |
+| Sessão (token + nome do usuário) | `localStorage`, chave `rdv:session` |
+| Modo contingência ligado | `sessionStorage`, chave `rdv:contingencia` (some ao fechar a aba) |
+| Dados de contingência | `src/data/recipes.js` e `src/data/categories.js` (mesmo formato da API) |
 
-A lista exibida é a união das receitas da API com as cadastradas no navegador (`listRecipes` em `src/services/recipeService.js`). Para limpar os dados locais, apague essas chaves em _DevTools → Application → Local Storage_.
+Na AV1 favoritos e receitas novas ficavam no `localStorage` (`rdv:favorites` e `rdv:custom-recipes`). Na AV2 eles foram para a API e essas chaves não são mais lidas.
 
-Como o banco H2 é em memória, os dados da API voltam ao estado inicial sempre que ela reinicia. Os dados do `localStorage` ficam apenas no navegador de quem os criou.
+Como o banco H2 é em memória, os dados da API voltam ao estado inicial sempre que ela reinicia, e as sessões abertas caem (o front trata como sessão expirada).
 
 ## 🔌 Contrato da API
 
-Base: `VITE_API_URL` (padrão `http://localhost:8080`). Detalhes completos no README da API.
+Base: `VITE_API_URL` (padrão `http://localhost:8080`). Detalhes, exemplos de corpo e de resposta no README da API.
 
-| Método e caminho | Resposta |
-| --- | --- |
-| `GET /api/receitas?busca=&categoria=` | 200 com a lista de receitas |
-| `GET /api/receitas/{id}` | 200 com a receita; 404 se não existe; 400 se o `id` não é número |
-| `GET /api/categorias` | 200 com a lista de categorias |
+| Método e caminho | Acesso | Resposta |
+| --- | --- | --- |
+| `POST /api/auth/login` | Público | 200 `{ token, user }`; 401 usuário/senha errados; 400 campo vazio |
+| `GET /api/auth/me` | Token | 200 `{ id, name, username }`; 401 sem sessão válida |
+| `POST /api/auth/logout` | Token | 204 |
+| `GET /api/receitas?busca=&categoria=` | Público | 200 com a lista |
+| `GET /api/receitas/{id}` | Público | 200; 404 se não existe; 400 se o `id` não é número |
+| `POST /api/receitas` | Token | 201 com a receita; 400 com erros por campo; 401 |
+| `DELETE /api/receitas/{id}` | Token (autor) | 204; 403 se não for o autor; 404; 401 |
+| `GET /api/categorias` | Público | 200 com a lista |
+| `GET /api/favoritos` | Token | 200 com as receitas favoritas do usuário |
+| `PUT /api/favoritos/{id}` | Token | 204 (favoritar de novo não é erro); 404 |
+| `DELETE /api/favoritos/{id}` | Token | 204 |
 
-Receita (mesmos campos da AV1, para o front não precisar ser reescrito):
+Receita (mesmos campos da AV1; `authorId` e `author` entraram na AV2):
 
 ```json
 {
@@ -143,36 +181,40 @@ Receita (mesmos campos da AV1, para o front não precisar ser reescrito):
   "rating": 4.9,
   "time": "1h30",
   "ingredients": ["500 g de feijão preto", "..."],
-  "preparation": ["Deixe o feijão de molho...", "..."]
+  "preparation": ["Deixe o feijão de molho...", "..."],
+  "authorId": 1,
+  "author": "Dona Voinha"
 }
 ```
 
-Formato de erro (todas as falhas da API):
+Formato de erro (todas as falhas da API). `fields` traz os erros de validação com o mesmo nome dos campos do formulário, que o front marca direto no campo:
 
 ```json
-{ "status": 404, "message": "Receita 99 não encontrada.", "fields": {} }
+{ "status": 400, "message": "Verifique os campos destacados.", "fields": { "title": "O nome deve ter entre 3 e 100 caracteres." } }
 ```
 
 As imagens ficam em `public/images` deste repositório; a API devolve apenas o caminho.
 
 ## 🔄 Evolução AV1 → AV2
 
-| Aspecto | AV1 | AV2 |
-| --- | --- | --- |
-| Receitas e categorias | Arquivos locais `src/data/*.js` | API REST Java + Spring Boot (H2) |
-| Acesso aos dados | `getAllRecipes()` síncrono | Camada `src/services/` com `fetch` assíncrono |
-| Estados de tela | Lista vazia, validação, sucesso | Carregando, erro com nova tentativa, vazio e 404 |
-| Configuração | Nenhuma | `VITE_API_URL` em `.env` (modelo em `.env.example`) |
-| Visual | Tema verde | Tema novo (creme, amarelo e verde-limão) em `theme.css` |
-
-Etapas da AV2 ainda **não concluídas**: login com JWT, cadastro de receita e favoritos gravados na API, rotas protegidas e logout.
+| Aspecto | Situação na AV1 | Evolução na AV2 | Evidência |
+| --- | --- | --- | --- |
+| Dados | Arquivos locais `src/data/*.js` | API REST Java + Spring Boot (H2) | `src/services/*Service.js`, repositório da API |
+| Acesso aos dados | `getAllRecipes()` síncrono | `fetch` assíncrono centralizado em `services/api.js` | `src/services/` |
+| Cadastro e favoritos | `localStorage` do navegador | Gravados na API, por usuário | `recipeService.createRecipe`, `favoriteService` |
+| Autenticação | Não implementada | Login, sessão restaurada no F5, rotas protegidas, logout, 401/403 | `pages/Login.jsx`, `contexts/AuthProvider.jsx`, `components/auth/ProtectedRoute.jsx` |
+| Estados da interface | Lista vazia, validação, sucesso | Carregando, erro com nova tentativa, vazio, 404, erro de servidor por campo | `hooks/useAsync.js`, `components/common/ErrorState.jsx` |
+| Falha da API | — | Modo contingência com dados locais e aviso fixo | `services/contingency.js`, `ContingencyBanner.jsx` |
+| Configuração | Nenhuma | `VITE_API_URL` em `.env` (modelo em `.env.example`) | `src/services/api.js` |
+| Organização | Páginas, componentes e dados | + `services/`, `contexts/`, `hooks/` de sessão e contingência | pastas |
+| Visual | Tema verde | Tema novo (creme, amarelo e verde-limão) | `theme.css`, `auth.css` |
 
 ## ✅ Requisitos
 
 AV1:
 
 - [x] React + JavaScript + Vite
-- [x] React Router com 8 rotas
+- [x] React Router com mais de 3 rotas úteis (detalhe e cadastro inclusos)
 - [x] Página inicial com o propósito do produto
 - [x] Dados locais em JS
 - [x] Busca, filtro por categoria e ordenação
@@ -182,23 +224,28 @@ AV1:
 - [x] Mensagens de lista vazia, validação, sucesso e erro
 - [x] Componentização
 
-AV2:
+AV2 (Opção B):
 
-- [x] API própria em Java + Spring Boot (repositório à parte)
-- [x] Camada de serviços e `VITE_API_URL`
-- [x] Estados de carregamento, erro e vazio
-- [ ] Autenticação (login com JWT), rotas protegidas e logout
-- [ ] Cadastro de receita e favoritos gravados na API
-- [ ] Dados de contingência para a apresentação
+- [x] Tema, repositório e funcionalidades da AV1 preservados
+- [x] Dados da API própria em Java + Spring Boot (repositório à parte)
+- [x] `fetch` concentrado em `src/services/` e URL-base em `VITE_API_URL` (`.env.example` incluído)
+- [x] Estados de carregamento, sucesso, vazio e erro, com "Tentar novamente"
+- [x] Login com validação e feedback (envio, credenciais inválidas, falha de rede)
+- [x] Rotas protegidas (`/nova-receita`, `/favoritos`), inclusive por URL digitada
+- [x] Sessão preservada após atualizar a página, sem guardar senha
+- [x] Logout que invalida o token na API e limpa a sessão local
+- [x] Tratamento de 401 (sessão expirada) e 403 (excluir receita de outra pessoa)
+- [x] Back-end com autenticação, leitura, criação e alteração de estado, protegendo os endpoints
+- [x] Dados de contingência compatíveis com a interface
 
 ## ⚠️ Limitações e contingência
 
-- A API usa banco H2 em memória: ao reiniciar, os dados voltam ao estado inicial.
-- Receitas cadastradas e favoritos ainda ficam só no navegador (`localStorage`).
-- O filtro de categorias e o formulário de cadastro ainda leem `src/data/categories.js`, e não a API.
-- Se a API estiver fora do ar, as páginas mostram a mensagem de erro e o botão "Tentar novamente".
-- Contingência para a apresentação: os dados iniciais continuam em `src/data/recipes.js` e `src/data/categories.js`. Um modo de apresentação que use esses arquivos quando a API não responder ainda não está implementado.
-- Sem segredos no repositório: `.env` está no `.gitignore` e só o `.env.example` é versionado.
+- A API usa banco H2 em memória: ao reiniciar, receitas cadastradas, favoritos e sessões voltam ao estado inicial.
+- Sessões ficam na memória da API e valem 8 horas; não há "lembrar de mim" nem renovação de token.
+- Não há cadastro de novos usuários: só as contas de demonstração.
+- Não há edição de receita; a alteração de estado é feita por cadastro, exclusão e favoritos.
+- **Contingência:** se a API não responder, as páginas mostram "Servidor fora do ar" com **Tentar novamente** e **Ver dados de demonstração**. O segundo botão liga o modo contingência: as leituras passam a usar `src/data/` e uma faixa amarela avisa o usuário, com o botão "Voltar a usar a API". Login, cadastro, exclusão e favoritos não são simulados nesse modo; mostram uma mensagem clara.
+- Sem segredos no repositório: `.env` está no `.gitignore`, só o `.env.example` é versionado, e as senhas de demonstração existem na API apenas como hash BCrypt.
 
 ## 👨‍🍳 Autoria
 
