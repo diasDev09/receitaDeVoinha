@@ -40,7 +40,7 @@ Receitas de família costumam ficar em cadernos, mensagens e na memória de quem
 - `fetch` para consumir a API, centralizado em `src/services/`
 - Context API (`AuthProvider`) para a sessão
 - [oxlint](https://oxc.rs/docs/guide/usage/linter) para análise do código
-- Back-end (repositório à parte): Java 25, Spring Boot, Spring Data JPA, BCrypt e banco H2
+- Back-end (repositório à parte): Java 25, Spring Boot, Spring Data JPA, BCrypt, Flyway e PostgreSQL no Supabase (H2 em memória como padrão local)
 
 ## ▶️ Como executar
 
@@ -141,7 +141,7 @@ A senha nunca é salva no navegador nem no repositório; a API guarda só o hash
 
 | Dado | Onde fica |
 | --- | --- |
-| Receitas e categorias | API (banco H2 em memória, carregado de `data.sql` a cada início) |
+| Receitas e categorias | API: PostgreSQL no Supabase (persistente). Sem configuração, H2 em memória |
 | Receitas cadastradas | API (`POST /api/receitas`), com o usuário logado como autor |
 | Favoritos | API, por usuário (`/api/favoritos`) |
 | Sessão (token + nome do usuário) | `localStorage`, chave `rdv:session` |
@@ -150,7 +150,7 @@ A senha nunca é salva no navegador nem no repositório; a API guarda só o hash
 
 Na AV1 favoritos e receitas novas ficavam no `localStorage` (`rdv:favorites` e `rdv:custom-recipes`). Na AV2 eles foram para a API e essas chaves não são mais lidas.
 
-Como o banco H2 é em memória, os dados da API voltam ao estado inicial sempre que ela reinicia, e as sessões abertas caem (o front trata como sessão expirada).
+Com o Supabase configurado na API (`.env` dela), receitas cadastradas e favoritos continuam salvos depois de reiniciar o servidor. Sem ele, a API usa H2 em memória e os dados voltam ao estado inicial. Em ambos os casos as sessões ficam na memória da API e caem ao reiniciá-la (o front trata como sessão expirada).
 
 ## 🔌 Contrato da API
 
@@ -200,7 +200,7 @@ As imagens ficam em `public/images` deste repositório; a API devolve apenas o c
 
 | Aspecto | Situação na AV1 | Evolução na AV2 | Evidência |
 | --- | --- | --- | --- |
-| Dados | Arquivos locais `src/data/*.js` | API REST Java + Spring Boot (H2) | `src/services/*Service.js`, repositório da API |
+| Dados | Arquivos locais `src/data/*.js` | API REST Java + Spring Boot com PostgreSQL no Supabase | `src/services/*Service.js`, repositório da API |
 | Acesso aos dados | `getAllRecipes()` síncrono | `fetch` assíncrono centralizado em `services/api.js` | `src/services/` |
 | Cadastro e favoritos | `localStorage` do navegador | Gravados na API, por usuário | `recipeService.createRecipe`, `favoriteService` |
 | Autenticação | Não implementada | Login, sessão restaurada no F5, rotas protegidas, logout, 401/403 | `pages/Login.jsx`, `contexts/AuthProvider.jsx`, `components/auth/ProtectedRoute.jsx` |
@@ -241,7 +241,7 @@ AV2 (Opção B):
 
 ## ⚠️ Limitações e contingência
 
-- A API usa banco H2 em memória: ao reiniciar, receitas cadastradas, favoritos e sessões voltam ao estado inicial.
+- Sem o `.env` do Supabase, a API usa H2 em memória e, ao reiniciar, receitas cadastradas e favoritos voltam ao estado inicial. Com o Supabase eles persistem; só as sessões caem ao reiniciar a API.
 - Sessões ficam na memória da API e valem 8 horas; não há "lembrar de mim" nem renovação de token.
 - Não há cadastro de novos usuários: só as contas de demonstração.
 - Não há edição de receita; a alteração de estado é feita por cadastro, exclusão e favoritos.
