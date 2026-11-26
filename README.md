@@ -23,6 +23,7 @@ Receitas de família costumam ficar em cadernos, mensagens e na memória de quem
 - Listagem de receitas com **busca por texto** (nome, descrição e ingredientes), **filtro por categoria** e **ordenação**
 - Página de **detalhes** com ingredientes, modo de preparo e autor
 - **Login** com validação de campos e feedback de envio, credenciais inválidas e falha de rede
+- **Criar conta** (`/cadastro`): nome, usuário e senha com confirmação; a pessoa já entra logada e volta para a página que queria abrir
 - **Sessão preservada** após atualizar a página (token no `localStorage`, nunca a senha) e **logout**
 - **Rotas protegidas** (`/nova-receita` e `/favoritos`): sem sessão, redirecionam para `/login` e depois voltam para onde o usuário queria ir
 - **Favoritar** receitas, com página de favoritos por usuário (gravados na API)
@@ -94,6 +95,7 @@ Outros comandos:
 | `/categorias` | Categorias | Público |
 | `/sobre` | Sobre o projeto | Público |
 | `/login` | Login | Público |
+| `/cadastro` | Criar conta | Público |
 | `/nova-receita` | Formulário de cadastro | **Protegida** |
 | `/favoritos` | Receitas favoritadas do usuário | **Protegida** |
 | `*` | Página não encontrada (404) | Público |
@@ -159,6 +161,7 @@ Base: `VITE_API_URL` (padrão `http://localhost:8080`). Detalhes, exemplos de co
 | Método e caminho | Acesso | Resposta |
 | --- | --- | --- |
 | `POST /api/auth/login` | Público | 200 `{ token, user }`; 401 usuário/senha errados; 400 campo vazio |
+| `POST /api/auth/cadastro` | Público | 201 `{ token, user }` (a pessoa já entra logada); 400 por campo; 409 se o usuário já existe |
 | `GET /api/auth/me` | Token | 200 `{ id, name, username }`; 401 sem sessão válida |
 | `POST /api/auth/logout` | Token | 204 |
 | `GET /api/receitas?busca=&categoria=` | Público | 200 com a lista |
@@ -243,7 +246,7 @@ AV2 (Opção B):
 
 - Sem o `.env` do Supabase, a API usa H2 em memória e, ao reiniciar, receitas cadastradas e favoritos voltam ao estado inicial. Com o Supabase eles persistem; só as sessões caem ao reiniciar a API.
 - Sessões ficam na memória da API e valem 8 horas; não há "lembrar de mim" nem renovação de token.
-- Não há cadastro de novos usuários: só as contas de demonstração.
+- Não há perfis diferentes (como administrador) nem recuperação de senha.
 - Não há edição de receita; a alteração de estado é feita por cadastro, exclusão e favoritos.
 - **Contingência:** se a API não responder, as páginas mostram "Servidor fora do ar" com **Tentar novamente** e **Ver dados de demonstração**. O segundo botão liga o modo contingência: as leituras passam a usar `src/data/` e uma faixa amarela avisa o usuário, com o botão "Voltar a usar a API". Login, cadastro, exclusão e favoritos não são simulados nesse modo; mostram uma mensagem clara.
 - Sem segredos no repositório: `.env` está no `.gitignore`, só o `.env.example` é versionado, e as senhas de demonstração existem na API apenas como hash BCrypt.

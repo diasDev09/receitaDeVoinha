@@ -11,6 +11,7 @@ const Favorites = lazy(() => import("./pages/Favorites"));
 const Categories = lazy(() => import("./pages/Categories"));
 const About = lazy(() => import("./pages/About"));
 const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/categorias" element={<Categories />} />
                 <Route path="/sobre" element={<About />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/cadastro" element={<Register />} />
 
                 {/* Rotas protegidas: sem sessão redirecionam para /login */}
                 <Route

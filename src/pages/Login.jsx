@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import useAuth from "../hooks/useAuth";
@@ -121,6 +121,14 @@ function Login() {
                     </Button>
                 </div>
             </form>
+
+            <p className="auth-switch">
+                Ainda não tem conta?{" "}
+                {/* repassa o "de onde veio" para o cadastro voltar ao mesmo lugar */}
+                <Link to="/cadastro" state={location.state}>
+                    Criar conta
+                </Link>
+            </p>
 
             <aside className="demo-accounts" aria-label="Contas de demonstração">
                 <h2>Contas de demonstração</h2>
