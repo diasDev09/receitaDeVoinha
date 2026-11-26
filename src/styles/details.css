@@ -1,97 +1,208 @@
+/* Receita aberta: duas páginas de um livro, com a calha (dobra) no meio */
+
 .back-link {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: var(--ink);
-    font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .back-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-.recipe-details__top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: center;
-    margin-bottom: 2rem;
+.spread {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: var(--radius);
+  background: var(--sheet);
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 24px 48px -30px rgba(20, 26, 46, 0.45);
 }
 
-.recipe-details__image {
-    width: 100%;
-    max-height: 380px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    background: var(--lime-soft);
+/* sombra da dobra entre as páginas */
+.spread::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 56px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(20, 26, 46, 0.06) 42%,
+    rgba(20, 26, 46, 0.14) 50%,
+    rgba(20, 26, 46, 0.06) 58%,
+    transparent
+  );
+  pointer-events: none;
 }
 
-.recipe-details__info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
+.spread__page {
+  min-width: 0;
+  padding: clamp(1.5rem, 4vw, 3.25rem);
 }
 
-.recipe-details__info h1 {
-    color: var(--ink);
+.spread__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
 }
 
-.recipe-details__description {
-    color: #555;
-    line-height: 1.6;
+.spread__category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+  color: var(--indigo);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.btn--favorited {
-    background: #c0392b;
+.spread__category:hover {
+  text-decoration: underline;
 }
 
-.btn--favorited:hover {
-    background: #a93226;
+.spread h1 {
+  margin: 0.4rem 0 0.35rem;
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
 }
 
-.feedback {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.95rem;
+.spread__author {
+  color: var(--muted);
+  font-style: italic;
 }
 
-.feedback--success {
-    background: var(--lime-soft);
-    color: var(--ink);
+.spread .recipe-meta {
+  margin-top: 1rem;
 }
 
-.feedback--error {
-    background: #fdecea;
-    color: #b3261e;
+.spread__description {
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
 }
 
-.recipe-details__content {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 2rem;
-    padding: 1.5rem;
-    background: #fff;
-    border-radius: var(--radius);
+.spread__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
 }
 
-.recipe-details__content h2 {
-    margin-bottom: 0.8rem;
-    color: var(--ink);
+.spread .feedback {
+  margin-top: 1.25rem;
 }
 
-.ingredients-list,
+/* Confirmação de exclusão na própria página */
+.confirm-box {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--burgundy);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--burgundy-soft);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.confirm-box__title {
+  margin-bottom: 0.25rem;
+  color: var(--burgundy);
+  font-weight: 600;
+}
+
+.confirm-box__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.btn--danger-solid {
+  background: var(--burgundy);
+  border-color: var(--burgundy);
+  color: #fff;
+}
+
+.btn--danger-solid:hover {
+  background: #66001a;
+  border-color: #66001a;
+}
+
+.spread__section + .spread__section {
+  margin-top: 2.75rem;
+}
+
+.spread__section h2 {
+  padding-bottom: 0.6rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--gold);
+}
+
+.ingredients-list {
+  list-style: none;
+}
+
+.ingredients-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted var(--rule-strong);
+}
+
+/* losango dourado como marcador */
+.ingredients-list li::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: translateY(-0.15em) rotate(45deg);
+}
+
 .preparation-list {
-    padding-left: 1.3rem;
-    line-height: 1.7;
+  list-style: none;
+  counter-reset: passo;
 }
 
 .preparation-list li {
-    margin-bottom: 0.5rem;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  padding: 0.6rem 0;
+  counter-increment: passo;
 }
 
-@media (max-width: 720px) {
-    .recipe-details__top,
-    .recipe-details__content {
-        grid-template-columns: 1fr;
-    }
+.preparation-list li::before {
+  content: counter(passo);
+  color: var(--indigo);
+  font-size: var(--text-lg);
+  font-style: italic;
+  line-height: 1.1;
+}
+
+@media (max-width: 860px) {
+  .spread {
+    grid-template-columns: 1fr;
+  }
+
+  .spread::after {
+    display: none;
+  }
+
+  .spread__page + .spread__page {
+    border-top: 1px solid var(--rule);
+  }
 }

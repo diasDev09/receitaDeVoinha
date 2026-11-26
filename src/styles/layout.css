@@ -1,134 +1,237 @@
+/* Estrutura: cabeçalho e rodapé em tecido, separados das páginas por friso duplo dourado */
+
 .app-shell {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 
 .main {
-    flex: 1;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+  flex: 1;
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
 }
 
-/* Header */
+/* Transição ao navegar (responde ao clique do usuário) */
+.page-turn {
+  animation: page-in 0.3s var(--ease) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- Cabeçalho ---------- */
+
 .header {
-    background: #fff;
-    border-bottom: 2px solid var(--lime-soft);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--cloth);
+  color: var(--on-cloth);
+  border-bottom: 3px double var(--gold);
+}
+
+.header :focus-visible,
+.footer :focus-visible,
+.cover :focus-visible {
+  outline-color: var(--gold);
 }
 
 .header__inner {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 2rem;
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
 }
 
 .header__logo {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--yellow);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--on-cloth);
+  font-family: var(--font-book);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
 }
 
-.header__search {
-    margin-left: auto;
+.header__logo svg {
+  color: var(--gold);
 }
 
-.search-bar {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 999px;
-    min-width: 200px;
-}
-
-/* Navbar */
 .navbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
 }
 
 .navbar__link {
-    padding: 0.4rem 0.9rem;
-    border-radius: 999px;
-    font-weight: 500;
+  padding: 0.35rem 0 0.3rem;
+  border-bottom: 2px solid transparent;
+  color: var(--on-cloth-muted);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.navbar__link:hover,
+.navbar__link:hover {
+  color: var(--on-cloth);
+}
+
 .navbar__link.active {
-    background: var(--lime-soft);
-    color: var(--ink);
+  border-bottom-color: var(--gold);
+  color: var(--on-cloth);
+  font-weight: 600;
 }
 
-/* Footer */
+.header__search {
+  margin-left: auto;
+  width: min(100%, 15rem);
+}
+
+.header .search input {
+  min-height: 2.35rem;
+  border-color: rgba(232, 238, 249, 0.25);
+  background: rgba(232, 238, 249, 0.06);
+  color: var(--on-cloth);
+  font-size: 0.9375rem;
+}
+
+.header .search input::placeholder {
+  color: var(--on-cloth-muted);
+}
+
+.header .search svg {
+  color: var(--on-cloth-muted);
+}
+
+.header .search input:focus-visible {
+  outline-color: var(--gold);
+  border-color: var(--gold);
+}
+
+.header__auth {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header__user {
+  color: var(--on-cloth-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+/* ---------- Aviso de contingência ---------- */
+
+.contingency-banner {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.contingency-banner__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+}
+
+.contingency-banner p {
+  display: flex;
+  flex: 1 1 320px;
+  align-items: flex-start;
+  gap: 0.6rem;
+  max-width: none;
+}
+
+.contingency-banner p svg {
+  flex: none;
+  margin-top: 0.2rem;
+}
+
+.contingency-banner .btn {
+  background: var(--cloth);
+  border-color: var(--cloth);
+  color: var(--on-cloth);
+}
+
+/* ---------- Rodapé (colofão) ---------- */
+
 .footer {
-    background: var(--yellow);
-    color: #fff;
-    text-align: center;
-    padding: 1.5rem 0;
+  background: var(--cloth);
+  color: var(--on-cloth-muted);
+  border-top: 3px double var(--gold);
 }
 
-/* 404 */
-.not-found {
-    text-align: center;
-    padding: 3rem 0;
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
 }
 
-.not-found h1 {
-    font-size: 4rem;
-    color: var(--yellow);
-}
-
-.not-found p {
-    margin: 1rem 0 1.5rem;
-}
-
-/* Header fixo no topo */
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(6px);
-}
-
-.header__logo {
-    font-family: var(--font-title);
-    font-size: 1.4rem;
-}
-
-.search-bar {
-    font: inherit;
-}
-
-.search-bar:focus {
-    outline: 2px solid var(--yellow);
-    border-color: var(--yellow);
-}
-
-/* Footer com topo arredondado */
-.footer {
-    margin-top: 2rem;
-    border-radius: 40px 40px 0 0;
+.footer__colophon {
+  color: var(--on-cloth);
+  font-style: italic;
 }
 
 .footer small {
-    opacity: 0.8;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
 }
 
-/* Página entra suavemente */
-.main>* {
-    animation: fade-up 0.5s ease both;
+/* Telas médias: a busca desce para uma linha própria e Entrar/Sair fica no topo */
+@media (max-width: 1100px) {
+  .header__search {
+    order: 4;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .header__auth {
+    margin-left: auto;
+  }
 }
 
-@media (max-width: 720px) {
-    .header__search {
-        width: 100%;
-        margin-left: 0;
-    }
+@media (max-width: 767px) {
+  .header {
+    position: static;
+  }
 
-    .header__search .search-bar {
-        width: 100%;
-    }
+  .header__inner {
+    gap: 0.75rem 1rem;
+  }
+
+  .navbar {
+    order: 3;
+    width: 100%;
+    gap: 0.25rem 1.1rem;
+  }
+
+  .header__search {
+    order: 4;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .header__auth {
+    margin-left: auto;
+  }
 }

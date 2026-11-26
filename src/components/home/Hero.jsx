@@ -1,44 +1,44 @@
 import { Link } from "react-router-dom";
+import RecipeMeta from "../recipes/RecipeMeta";
 import { PLACEHOLDER, handleImageError } from "../../utils/images";
 
+// Capa do caderno: tecido, lombada, friso dourado e uma prancha colada
 function Hero({ recipe }) {
     return (
-        <section className="hero">
-            <div className="hero__text">
-                <span className="hero__tag">🌿 Receitas caseiras</span>
-                <h1>
-                    Sabores de <span>vó</span> direto para a sua mesa
+        <section className="cover" aria-labelledby="cover-title">
+            <span className="cover__frame" aria-hidden="true" />
+
+            <div className="cover__text">
+                <h1 id="cover-title" className="cover__title">
+                    Receita de Voinha
                 </h1>
-                <p>
-                    Descubra receitas tradicionais, salve suas favoritas e cadastre as
-                    que você mais ama. Tudo organizado, simples e feito com carinho.
+                <hr className="cover__rule" />
+                <p className="cover__lede">
+                    O caderno onde a família guarda a feijoada de domingo, o pudim das
+                    festas e o pão de queijo do café.
                 </p>
-                <div className="hero__actions">
-                    <Link to="/receitas" className="btn">
-                        Explorar receitas
+                <div className="cover__actions">
+                    <Link to="/receitas" className="btn btn--gold">
+                        Ver todas as receitas
                     </Link>
-                    <Link to="/nova-receita" className="btn btn--secondary">
+                    <Link to="/nova-receita" className="btn btn--ghost">
                         Cadastrar receita
                     </Link>
                 </div>
             </div>
 
             {recipe && (
-                <div className="hero__visual">
-                    <div className="hero__blob" aria-hidden="true" />
+                <Link to={`/receitas/${recipe.id}`} className="cover__plate">
                     <img
-                        className="hero__image"
                         src={recipe.image || PLACEHOLDER}
-                        alt={recipe.title}
+                        alt=""
                         onError={handleImageError}
                     />
-                    <Link to={`/receitas/${recipe.id}`} className="hero__badge">
+                    <span className="cover__caption">
                         <strong>{recipe.title}</strong>
-                        <span>
-                            ⭐ {recipe.rating.toFixed(1)} · ⏱️ {recipe.time}
-                        </span>
-                    </Link>
-                </div>
+                        <RecipeMeta recipe={recipe} />
+                    </span>
+                </Link>
             )}
         </section>
     );

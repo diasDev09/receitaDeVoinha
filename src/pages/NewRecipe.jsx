@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CircleCheck } from "lucide-react";
 import RecipeForm from "../components/recipes/RecipeForm";
 import Button from "../components/common/Button";
 import Loading from "../components/common/Loading";
@@ -43,7 +44,10 @@ function NewRecipe() {
         return (
             <section className="form-page">
                 <div className="feedback feedback--success form-success" role="status">
-                    <h2>Receita cadastrada com sucesso! 🎉</h2>
+                    <h2>
+                        <CircleCheck size={24} strokeWidth={1.75} aria-hidden="true" />
+                        Receita cadastrada
+                    </h2>
                     <p>“{status.recipe.title}” foi salva no servidor e já aparece na lista de receitas.</p>
                     <div className="form-actions">
                         <Link to={`/receitas/${status.recipe.id}`} className="btn">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BookOpen, LogIn, LogOut } from "lucide-react";
 import Navbar from "./Navbar";
 import SearchBar from "../common/SearchBar";
 import useAuth from "../../hooks/useAuth";
@@ -26,12 +27,13 @@ function Header() {
         <header className="header">
             <div className="header__inner container">
                 <Link to="/" className="header__logo">
-                    🍲 Receita de Voinha
+                    <BookOpen size={22} strokeWidth={1.5} aria-hidden="true" />
+                    Receita de Voinha
                 </Link>
 
                 <Navbar />
 
-                <form className="header__search" onSubmit={handleSubmit}>
+                <form className="header__search" onSubmit={handleSubmit} role="search">
                     <SearchBar value={term} onChange={setTerm} />
                 </form>
 
@@ -39,14 +41,20 @@ function Header() {
                     {user ? (
                         <>
                             <span className="header__user" title={`Conectado como ${user.username}`}>
-                                Olá, {user.name}
+                                {user.name}
                             </span>
-                            <button type="button" className="btn btn--small" onClick={handleLogout}>
+                            <button
+                                type="button"
+                                className="btn btn--ghost btn--small"
+                                onClick={handleLogout}
+                            >
+                                <LogOut size={16} strokeWidth={1.75} aria-hidden="true" />
                                 Sair
                             </button>
                         </>
                     ) : (
-                        <Link to="/login" className="btn btn--small">
+                        <Link to="/login" className="btn btn--gold btn--small">
+                            <LogIn size={16} strokeWidth={1.75} aria-hidden="true" />
                             Entrar
                         </Link>
                     )}
