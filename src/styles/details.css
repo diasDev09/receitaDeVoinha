@@ -104,6 +104,43 @@
   margin-top: 1.25rem;
 }
 
+/* Confirmação de exclusão na própria página */
+.confirm-box {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--burgundy);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--burgundy-soft);
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.confirm-box__title {
+  margin-bottom: 0.25rem;
+  color: var(--burgundy);
+  font-weight: 600;
+}
+
+.confirm-box__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.btn--danger-solid {
+  background: var(--burgundy);
+  border-color: var(--burgundy);
+  color: #fff;
+}
+
+.btn--danger-solid:hover {
+  background: #66001a;
+  border-color: #66001a;
+}
+
 .spread__section + .spread__section {
   margin-top: 2.75rem;
 }

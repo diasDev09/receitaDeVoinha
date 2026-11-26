@@ -23,6 +23,8 @@ function RecipeDetails() {
     const { isFavorite, toggleFavorite, loading: loadingFavorites } = useFavorites();
     const [message, setMessage] = useState(null); // { type: "success" | "error", text }
     const [busy, setBusy] = useState(false);
+    // Confirmação de exclusão na própria página (window.confirm não aparece em todo navegador)
+    const [confirming, setConfirming] = useState(false);
 
     const load = useCallback((options) => getRecipe(id, options), [id]);
     const { data: recipe, loading, error, reload } = useAsync(load);
@@ -69,8 +71,8 @@ function RecipeDetails() {
         }
     }
 
+    // Só roda depois que o usuário confirma no quadro "Excluir esta receita?"
     async function handleDelete() {
-        if (!window.confirm(`Excluir "${recipe.title}"? Essa ação não pode ser desfeita.`)) return;
         setBusy(true);
         try {
             await deleteRecipe(recipe.id);
@@ -79,6 +81,7 @@ function RecipeDetails() {
             // 403: não é o autor; 401: sessão caiu (o AuthProvider já limpou a sessão)
             setMessage({ type: "error", text: err.message });
             setBusy(false);
+            setConfirming(false);
         }
     }
 
@@ -132,11 +135,14 @@ function RecipeDetails() {
                             {favorite ? "Favoritada" : isAuthenticated ? "Favoritar" : "Entre para favoritar"}
                         </button>
 
-                        {isAuthor && (
+                        {isAuthor && !confirming && (
                             <button
                                 type="button"
                                 className="btn btn--danger"
-                                onClick={handleDelete}
+                                onClick={() => {
+                                    setMessage(null);
+                                    setConfirming(true);
+                                }}
                                 disabled={busy}
                             >
                                 <Trash2 size={17} strokeWidth={1.75} aria-hidden="true" />
@@ -144,6 +150,38 @@ function RecipeDetails() {
                             </button>
                         )}
                     </div>
+
+                    {confirming && (
+                        <div className="confirm-box" role="alertdialog" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+                            <p id="confirm-title" className="confirm-box__title">
+                                Excluir esta receita?
+                            </p>
+                            <p id="confirm-text">
+                                “{recipe.title}” sai do caderno para todo mundo. Essa ação não pode
+                                ser desfeita.
+                            </p>
+                            <div className="confirm-box__actions">
+                                <button
+                                    type="button"
+                                    className="btn btn--danger-solid"
+                                    onClick={handleDelete}
+                                    disabled={busy}
+                                >
+                                    <Trash2 size={17} strokeWidth={1.75} aria-hidden="true" />
+                                    {busy ? "Excluindo..." : "Excluir"}
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn--secondary"
+                                    onClick={() => setConfirming(false)}
+                                    disabled={busy}
+                                    autoFocus
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {message && (
                         <p
