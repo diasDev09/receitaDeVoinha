@@ -9,17 +9,36 @@ export class ApiError extends Error {
         super(message);
         this.name = "ApiError";
         this.status = status; // 0 = não chegou a falar com a API
-        this.fields = fields;
+        this.fields = fields || {};
     }
 }
 
-export async function request(path, { signal, ...options } = {}) {
+// Token da sessão atual. Quem define é o AuthProvider (login, logout e restauração).
+let authToken = null;
+let unauthorizedHandler = null;
+
+export function setAuthToken(token) {
+    authToken = token || null;
+}
+
+// Chamado quando uma requisição COM token volta 401 (sessão vencida ou API reiniciada)
+export function setUnauthorizedHandler(handler) {
+    unauthorizedHandler = handler;
+}
+
+export async function request(path, { signal, body, headers, ...options } = {}) {
+    const sentToken = authToken;
+    const finalHeaders = { Accept: "application/json", ...headers };
+    if (body !== undefined) finalHeaders["Content-Type"] = "application/json";
+    if (sentToken) finalHeaders.Authorization = `Bearer ${sentToken}`;
+
     let response;
     try {
         response = await fetch(`${API_URL}${path}`, {
             ...options,
             signal,
-            headers: { Accept: "application/json", ...options.headers },
+            headers: finalHeaders,
+            body: body === undefined ? undefined : JSON.stringify(body),
         });
     } catch (error) {
         if (error.name === "AbortError") throw error; // cancelada: não é erro de rede
@@ -30,11 +49,17 @@ export async function request(path, { signal, ...options } = {}) {
 
     // Erros da API vêm no formato { status, message, fields }
     if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 401 && sentToken) {
+            unauthorizedHandler?.();
+            throw new ApiError("Sua sessão expirou. Entre novamente.", 401);
+        }
+
         throw new ApiError(
-            body.message || `Erro ${response.status} ao chamar o servidor.`,
+            data.message || `Erro ${response.status} ao chamar o servidor.`,
             response.status,
-            body.fields,
+            data.fields,
         );
     }
 

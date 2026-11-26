@@ -1,6 +1,5 @@
-import categories from "../../data/categories";
-
-function RecipeFilter({ selected, onChange }) {
+// categories vem da API (GET /api/categorias), recebida da página por props
+function RecipeFilter({ categories, selected, onChange }) {
     return (
         <div className="recipe-filter" role="group" aria-label="Filtrar por categoria">
             <button

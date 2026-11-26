@@ -1,9 +1,9 @@
 export const STORAGE_KEYS = {
-    FAVORITES: "rdv:favorites",
-    CUSTOM_RECIPES: "rdv:custom-recipes",
+    // { token, user: { id, name, username } }. A senha nunca é guardada.
+    SESSION: "rdv:session",
 };
 
-export function getStorage(key, fallback = []) {
+export function getStorage(key, fallback = null) {
     try {
         const raw = localStorage.getItem(key);
         return raw ? JSON.parse(raw) : fallback;
@@ -23,11 +23,15 @@ export function setStorage(key, value) {
     }
 }
 
-// Atalhos específicos do projeto
-export const getFavorites = () => getStorage(STORAGE_KEYS.FAVORITES, []);
-export const saveFavorites = (ids) => setStorage(STORAGE_KEYS.FAVORITES, ids);
+export function removeStorage(key) {
+    try {
+        localStorage.removeItem(key);
+    } catch (error) {
+        console.error(`Erro ao remover "${key}" do localStorage:`, error);
+    }
+}
 
-export const getCustomRecipes = () =>
-    getStorage(STORAGE_KEYS.CUSTOM_RECIPES, []);
-export const saveCustomRecipes = (list) =>
-    setStorage(STORAGE_KEYS.CUSTOM_RECIPES, list);
+// Atalhos da sessão
+export const getSession = () => getStorage(STORAGE_KEYS.SESSION, null);
+export const saveSession = (session) => setStorage(STORAGE_KEYS.SESSION, session);
+export const clearSession = () => removeStorage(STORAGE_KEYS.SESSION);

@@ -28,7 +28,7 @@ function Categories() {
             </p>
 
             {loading && <Loading message="Carregando categorias..." />}
-            {error && <ErrorState message={error.message} onRetry={reload} />}
+            {error && <ErrorState error={error} onRetry={reload} />}
             {categories && categories.length === 0 && (
                 <EmptyState icon="🗂️" title="Nenhuma categoria cadastrada" />
             )}

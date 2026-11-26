@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
-import categories from "../../data/categories";
 import { validateRecipe } from "../../utils/validators";
 
 const INITIAL_VALUES = {
@@ -14,9 +13,12 @@ const INITIAL_VALUES = {
     preparation: "",
 };
 
-function RecipeForm({ onSubmit, onCancel }) {
+// categories vem da API (GET /api/categorias) pela página.
+// onSubmit é assíncrono e pode devolver erros por campo da API ({ title: "..." }).
+function RecipeForm({ categories, onSubmit, onCancel }) {
     const [values, setValues] = useState(INITIAL_VALUES);
     const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -31,14 +33,18 @@ function RecipeForm({ onSubmit, onCancel }) {
         }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
+        if (submitting) return;
 
         const foundErrors = validateRecipe(values);
         setErrors(foundErrors);
         if (Object.keys(foundErrors).length > 0) return;
 
-        onSubmit(values);
+        setSubmitting(true);
+        const serverErrors = await onSubmit(values);
+        setSubmitting(false);
+        if (serverErrors) setErrors(serverErrors);
     }
 
     const hasErrors = Object.keys(errors).length > 0;
@@ -133,10 +139,12 @@ function RecipeForm({ onSubmit, onCancel }) {
             />
 
             <div className="form-actions">
-                <Button variant="secondary" onClick={onCancel}>
+                <Button variant="secondary" onClick={onCancel} disabled={submitting}>
                     Cancelar
                 </Button>
-                <Button type="submit">Cadastrar</Button>
+                <Button type="submit" disabled={submitting}>
+                    {submitting ? "Salvando..." : "Cadastrar"}
+                </Button>
             </div>
         </form>
     );

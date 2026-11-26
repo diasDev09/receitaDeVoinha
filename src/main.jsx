@@ -10,12 +10,16 @@ import "./styles/home.css"
 import "./styles/categories.css"
 import "./styles/extras.css"
 import "./styles/theme.css"
+import "./styles/auth.css"
 import App from './App.jsx'
+import AuthProvider from "./contexts/AuthProvider";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

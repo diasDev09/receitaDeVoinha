@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollToTop from "../components/layout/ScrollToTop";
+import ContingencyBanner from "../components/layout/ContingencyBanner";
 import Loading from "../components/common/Loading";
 
 function MainLayout() {
@@ -10,6 +11,7 @@ function MainLayout() {
         <div className="app-shell">
             <ScrollToTop />
             <Header />
+            <ContingencyBanner />
             <main className="main container">
                 <Suspense fallback={<Loading />}>
                     <Outlet />
